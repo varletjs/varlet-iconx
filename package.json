@@ -36,11 +36,11 @@
     "build": "tsup",
     "release": "pnpm build && vr release",
     "lint": "eslint --ext .ts,.js",
-    "commit-lint": "node bin/index.js commit-lint"
+    "play": "node ./bin/index.js build"
   },
   "simple-git-hooks": {
     "pre-commit": "pnpm exec lint-staged --allow-empty --concurrent false",
-    "commit-msg": "pnpm run commit-lint -p $1"
+    "commit-msg": "vr commit-lint -p $1"
   },
   "lint-staged": {
     "*.{ts,tsx,js,vue,less}": "prettier --write",

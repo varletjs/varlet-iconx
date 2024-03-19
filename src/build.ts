@@ -46,7 +46,7 @@ export async function buildIcons(viConfig: VIConfig) {
 
   clearOutputs(fontsDir, cssDir)
 
-  const [{ ttf, glyphsData }] = await buildWebFont(name, io.entry)
+  const { ttf, glyphsData } = await buildWebFont(name, io.entry)
 
   const icons: { name: string; pointCode: string }[] = glyphsData.map((i: any) => ({
     name: i.metadata.name,

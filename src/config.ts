@@ -1,10 +1,8 @@
-import * as fse from 'fs-extra'
+import fse from 'fs-extra'
 import { resolve } from 'path'
 import { pathToFileURL } from 'url'
 
 const { pathExistsSync, statSync } = fse
-
-const VI_CONFIG = resolve(process.cwd(), 'vi.config.mjs')
 
 export interface VIConfig {
   /**
@@ -55,6 +53,7 @@ export function defineConfig(config: VIConfig) {
 }
 
 export async function getViConfig(): Promise<Required<VIConfig>> {
+  const VI_CONFIG = resolve(process.cwd(), 'vi.config.mjs')
   const config: any = pathExistsSync(VI_CONFIG)
     ? (await import(`${pathToFileURL(VI_CONFIG).href}?_t=${statSync(VI_CONFIG).mtimeMs}`)).default
     : {}
