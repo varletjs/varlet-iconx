@@ -1,0 +1,81 @@
+{
+  "name": "@varlet/icon-builder",
+  "type": "module",
+  "version": "0.0.0",
+  "description": "icon builder of varlet",
+  "keywords": [
+    "varlet",
+    "icon",
+    "builder"
+  ],
+  "author": "haoziqaq <357229046@qq.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/varletjs/varlet-icon-builder"
+  },
+  "bugs": "https://github.com/varletjs/varlet-icon-builder/issues",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "bin": {
+    "vi": "bin/index.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "tsup --watch",
+    "build": "tsup",
+    "release": "pnpm build && node bin/index.js release",
+    "lint": "eslint --ext .ts,.js",
+    "commit-lint": "node bin/index.js commit-lint"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "pnpm exec lint-staged --allow-empty --concurrent false",
+    "commit-msg": "pnpm run commit-lint -p $1"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,vue,less}": "prettier --write",
+    "*.{ts,tsx,js,vue}": "eslint --fix"
+  },
+  "packageManager": "pnpm@8.7.5",
+  "engines": {
+    "node": ">=16.0.0",
+    "pnpm": ">=8.0"
+  },
+  "devDependencies": {
+    "@types/conventional-changelog": "^3.1.5",
+    "@types/fs-extra": "^11.0.4",
+    "@types/inquirer": "^9.0.7",
+    "@types/node": "^20.9.0",
+    "@types/semver": "^7.5.5",
+    "@varlet/eslint-config": "^3.1.4",
+    "@varlet/release": "0.2.5",
+    "eslint": "^8.53.0",
+    "lint-staged": "^15.2.0",
+    "prettier": "^3.1.0",
+    "simple-git-hooks": "^2.9.0",
+    "tsup": "^8.0.1",
+    "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "commander": "^11.1.0",
+    "execa": "^8.0.1",
+    "webfont": "11.2.26",
+    "chokidar": "3.6.0",
+    "slash": "5.1.0",
+    "fs-extra": "^11.1.1",
+    "glob": "^10.3.10",
+    "inquirer": "^9.2.12",
+    "nanospinner": "^1.1.0",
+    "picocolors": "^1.0.0"
+  }
+}

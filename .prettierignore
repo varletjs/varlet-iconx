@@ -1,0 +1,7 @@
+dist/**
+
+CHANGELOG.md
+.github/**
+.history/**
+
+pnpm-lock.yaml
