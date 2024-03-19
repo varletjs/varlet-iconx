@@ -1,7 +1,9 @@
 dist/**
+icons/**
 
 CHANGELOG.md
 .github/**
 .history/**
+node_modules/**
 
 pnpm-lock.yaml

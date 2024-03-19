@@ -36,15 +36,8 @@
     "build": "tsup",
     "release": "pnpm build && vr release",
     "lint": "eslint --ext .ts,.js",
+    "format": "prettier --write .",
     "play": "node ./bin/index.js build"
-  },
-  "simple-git-hooks": {
-    "pre-commit": "pnpm exec lint-staged --allow-empty --concurrent false",
-    "commit-msg": "vr commit-lint -p $1"
-  },
-  "lint-staged": {
-    "*.{ts,tsx,js,vue,less}": "prettier --write",
-    "*.{ts,tsx,js,vue}": "eslint --fix"
   },
   "packageManager": "pnpm@8.7.5",
   "engines": {
@@ -57,7 +50,6 @@
     "@varlet/eslint-config": "^3.1.4",
     "@varlet/release": "0.2.5",
     "eslint": "^8.53.0",
-    "lint-staged": "^15.2.0",
     "prettier": "^3.1.0",
     "simple-git-hooks": "^2.9.0",
     "tsup": "^8.0.1",
