@@ -37,12 +37,13 @@ export async function buildIcons(viConfig: VIConfig) {
     fontStyle = 'normal',
     publicPath,
   } = viConfig
-  const io = getIo(viConfig)
 
+  const io = getIo(viConfig)
   const fontsDir = resolve(io.output, 'fonts')
   const cssDir = resolve(io.output, 'css')
 
   await removeDir(io.output, fontsDir, cssDir)
+
   const [{ ttf, glyphsData }] = await buildWebFont(name, io.entry)
 
   const icons: { name: string; pointCode: string }[] = glyphsData.map((i: any) => ({
@@ -92,7 +93,7 @@ ${icons
     writeFile(resolve(io.output, 'index.js'), indexTemplate),
   ])
 
-  logger.success('build success!')
+  logger.success('build icons success!')
 }
 
 export function getIo(viConfig: VIConfig) {

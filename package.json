@@ -34,7 +34,7 @@
   "scripts": {
     "dev": "tsup --watch",
     "build": "tsup",
-    "release": "vr release",
+    "release": "pnpm build && vr release",
     "lint": "eslint --ext .ts,.js",
     "commit-lint": "node bin/index.js commit-lint"
   },
