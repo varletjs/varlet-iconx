@@ -35,7 +35,6 @@ pnpm add @varlet/icon-builder -D
 
 ## 使用方法
 
-
 ### 配置文件
 
 ```js

@@ -106,5 +106,3 @@ export interface VIConfig {
   publicPath?: string
 }
 ```
-
-
