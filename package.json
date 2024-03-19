@@ -52,11 +52,8 @@
     "pnpm": ">=8.0"
   },
   "devDependencies": {
-    "@types/conventional-changelog": "^3.1.5",
     "@types/fs-extra": "^11.0.4",
-    "@types/inquirer": "^9.0.7",
     "@types/node": "^20.9.0",
-    "@types/semver": "^7.5.5",
     "@varlet/eslint-config": "^3.1.4",
     "@varlet/release": "0.2.5",
     "eslint": "^8.53.0",
@@ -68,14 +65,10 @@
   },
   "dependencies": {
     "commander": "^11.1.0",
-    "execa": "^8.0.1",
     "webfont": "11.2.26",
     "chokidar": "3.6.0",
     "slash": "5.1.0",
     "fs-extra": "^11.1.1",
-    "glob": "^10.3.10",
-    "inquirer": "^9.2.12",
-    "nanospinner": "^1.1.0",
     "picocolors": "^1.0.0"
   }
 }
