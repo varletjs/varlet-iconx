@@ -10,11 +10,13 @@ export interface BuildCommandOptions {
   watch?: boolean
 }
 
-const { removeSync, ensureDir, writeFile } = fse
+const { removeSync, ensureDirSync, writeFile } = fse
 
-async function removeDir(output: string, fontsDir: string, cssDir: string) {
-  removeSync(output)
-  await Promise.all([ensureDir(fontsDir), ensureDir(cssDir)])
+function clearOutputs(fontsDir: string, cssDir: string) {
+  removeSync(fontsDir)
+  removeSync(cssDir)
+  ensureDirSync(fontsDir)
+  ensureDirSync(cssDir)
 }
 
 function buildWebFont(name: string, entry: string) {
@@ -42,7 +44,7 @@ export async function buildIcons(viConfig: VIConfig) {
   const fontsDir = resolve(io.output, 'fonts')
   const cssDir = resolve(io.output, 'css')
 
-  await removeDir(io.output, fontsDir, cssDir)
+  clearOutputs(fontsDir, cssDir)
 
   const [{ ttf, glyphsData }] = await buildWebFont(name, io.entry)
 
