@@ -6,9 +6,8 @@ import logger from './logger.js'
 import { resolve } from 'path'
 import { VIConfig, getViConfig } from './config.js'
 
-export interface IconsIo {
-  entry: string
-  output: string
+export interface BuildCommandOptions {
+  watch?: boolean
 }
 
 const { removeSync, ensureDir, writeFile } = fse
@@ -28,14 +27,23 @@ function buildWebFont(name: string, entry: string) {
   })
 }
 
-export async function buildIcons(viConfig: Required<VIConfig>, io: IconsIo) {
-  const { name, namespace, base64, publicPath, fontFamilyClassName, fontWeight, fontStyle } = viConfig
+export async function buildIcons(viConfig: VIConfig) {
+  const {
+    name = 'varlet-icons',
+    namespace = 'var-icon',
+    base64 = true,
+    fontFamilyClassName = 'var-icon--set',
+    fontWeight = 'normal',
+    fontStyle = 'normal',
+    publicPath,
+  } = viConfig
+  const io = getIo(viConfig)
 
   const fontsDir = resolve(io.output, 'fonts')
   const cssDir = resolve(io.output, 'css')
 
   await removeDir(io.output, fontsDir, cssDir)
-  const [{ ttf, glyphsData }] = await buildWebFont(name!, io.entry)
+  const [{ ttf, glyphsData }] = await buildWebFont(name, io.entry)
 
   const icons: { name: string; pointCode: string }[] = glyphsData.map((i: any) => ({
     name: i.metadata.name,
@@ -87,22 +95,23 @@ ${icons
   logger.success('build success!')
 }
 
-export interface BuildCommandOptions {
-  watch?: boolean
-}
-
-export async function build({ watch = false }: BuildCommandOptions = {}) {
-  const viConfig = await getViConfig()
+export function getIo(viConfig: VIConfig) {
   const { entry = './svg', output = './dist' } = viConfig
   const io = {
     entry: resolve(process.cwd(), entry),
     output: resolve(process.cwd(), output),
   }
+  return io
+}
 
-  const task = () => buildIcons(viConfig, io)
+export async function build({ watch = false }: { watch: boolean }) {
+  const viConfig = await getViConfig()
+
+  const io = getIo(viConfig)
+  const task = () => buildIcons(viConfig)
 
   if (watch) {
-    await buildIcons(viConfig, io)
+    await buildIcons(viConfig)
     chokidar.watch(io.entry, { ignoreInitial: true }).on('all', task)
     logger.info(`watching for ${io.entry} changes...`)
     return

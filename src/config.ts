@@ -32,10 +32,22 @@ export interface VIConfig {
    * SVG icons folder path.
    */
   output?: string
-  publicPath?: string
+  /**
+   * @default `var-icon--set`
+   * icon font family class name.
+   */
   fontFamilyClassName?: string
+  /**
+   * @default `normal`
+   * icon font weight.
+   */
   fontWeight?: string
+  /**
+   * @default `normal`
+   * icon font style.
+   */
   fontStyle?: string
+  publicPath?: string
 }
 
 export function defineConfig(config: VIConfig) {
