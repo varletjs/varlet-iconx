@@ -1,3 +1,12 @@
+## [0.0.4](https://github.com/varletjs/varlet-icon-builder/compare/v0.0.3...v0.0.4) (2024-04-24)
+
+
+### Features
+
+* support scss format ([76823e4](https://github.com/varletjs/varlet-icon-builder/commit/76823e4170121500407cae6a39e708c92bea416d))
+
+
+
 ## [0.0.3](https://github.com/varletjs/varlet-icon-builder/compare/v0.0.2...v0.0.3) (2024-03-19)
 
 
