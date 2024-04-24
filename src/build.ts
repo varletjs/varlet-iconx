@@ -92,6 +92,7 @@ ${icons
     writeFile(resolve(fontsDir, `${name}-webfont.ttf`), ttf),
     writeFile(resolve(cssDir, `${name}.css`), cssTemplate),
     writeFile(resolve(cssDir, `${name}.less`), cssTemplate),
+    writeFile(resolve(cssDir, `${name}.scss`), cssTemplate),
     writeFile(resolve(io.output, 'index.js'), indexTemplate),
   ])
 
