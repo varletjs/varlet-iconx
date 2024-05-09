@@ -1,3 +1,8 @@
 export interface Options {
-  // define your plugin options here
+  dir?: string
+  moduleId?: string
+  generatedFilename?: string
+  name?: string
+  namespace?: string
+  fontFamilyClassName?: string
 }

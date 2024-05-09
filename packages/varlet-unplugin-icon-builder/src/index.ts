@@ -5,16 +5,7 @@ import { buildIcons } from '@varlet/icon-builder'
 import { resolve } from 'path'
 import fse from 'fs-extra'
 
-export interface IconBuilderOptions {
-  dir?: string
-  moduleId?: string
-  generatedFilename?: string
-  name?: string
-  namespace?: string
-  fontFamilyClassName?: string
-}
-
-export const unpluginFactory: UnpluginFactory<IconBuilderOptions | undefined> = (options: IconBuilderOptions = {}) => {
+export const unpluginFactory: UnpluginFactory<Options | undefined> = (options: Options = {}) => {
   const {
     moduleId = 'virtual:icons',
     generatedFilename = 'virtual.icons.css',
