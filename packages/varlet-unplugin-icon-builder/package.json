@@ -59,7 +59,6 @@
     "build": "tsup"
   },
   "peerDependencies": {
-    "esbuild": "*",
     "rollup": "^3",
     "vite": ">=3",
     "webpack": "^4 || ^5"
