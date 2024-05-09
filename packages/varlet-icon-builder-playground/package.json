@@ -14,7 +14,8 @@
     "dev": "vi build -w",
     "build": "vi build",
     "dev:play": "vite",
-    "build:play": "vite build"
+    "build:play": "vite build",
+    "preview:play": "vite preview"
   },
   "devDependencies": {
     "@varlet/icon-builder": "workspace: *",
