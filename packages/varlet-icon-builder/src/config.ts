@@ -46,6 +46,11 @@ export interface VIConfig {
    */
   fontStyle?: string
   publicPath?: string
+  /**
+   * @default `false`
+   * Whether to output files
+   */
+  emitFile?: boolean
 }
 
 export function defineConfig(config: VIConfig) {

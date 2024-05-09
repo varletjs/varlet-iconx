@@ -38,13 +38,16 @@ export async function buildIcons(viConfig: VIConfig) {
     fontWeight = 'normal',
     fontStyle = 'normal',
     publicPath,
+    emitFile = true,
   } = viConfig
 
   const io = getIo(viConfig)
   const fontsDir = resolve(io.output, 'fonts')
   const cssDir = resolve(io.output, 'css')
 
-  clearOutputs(fontsDir, cssDir)
+  if (emitFile) {
+    clearOutputs(fontsDir, cssDir)
+  }
 
   const { ttf, glyphsData } = await buildWebFont(name, io.entry)
 
@@ -77,6 +80,7 @@ ${iconNames.join(',\n')}
 
 .${fontFamilyClassName} {
   font-family: "${name}";
+  font-style: ${fontStyle};
 }
 
 ${icons
@@ -88,15 +92,22 @@ ${icons
   .join('\n\n')}
 `
 
-  await Promise.all([
-    writeFile(resolve(fontsDir, `${name}-webfont.ttf`), ttf),
-    writeFile(resolve(cssDir, `${name}.css`), cssTemplate),
-    writeFile(resolve(cssDir, `${name}.less`), cssTemplate),
-    writeFile(resolve(cssDir, `${name}.scss`), cssTemplate),
-    writeFile(resolve(io.output, 'index.js'), indexTemplate),
-  ])
+  if (emitFile) {
+    await Promise.all([
+      writeFile(resolve(fontsDir, `${name}-webfont.ttf`), ttf),
+      writeFile(resolve(cssDir, `${name}.css`), cssTemplate),
+      writeFile(resolve(cssDir, `${name}.less`), cssTemplate),
+      writeFile(resolve(cssDir, `${name}.scss`), cssTemplate),
+      writeFile(resolve(io.output, 'index.js'), indexTemplate),
+    ])
 
-  logger.success('build icons success!')
+    logger.success('build icons success!')
+  }
+
+  return {
+    indexTemplate,
+    cssTemplate,
+  }
 }
 
 export function getIo(viConfig: VIConfig) {

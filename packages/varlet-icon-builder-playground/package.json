@@ -1,0 +1,24 @@
+{
+  "name": "@varlet/icon-builder-playground",
+  "private": true,
+  "version": "0.0.4",
+  "description": "icon builder playground",
+  "type": "module",
+  "keywords": [
+    "icon",
+    "builder",
+    "playground"
+  ],
+  "license": "MIT",
+  "scripts": {
+    "dev": "vi build -w",
+    "build": "vi build",
+    "dev:play": "vite",
+    "build:play": "vite build"
+  },
+  "devDependencies": {
+    "@varlet/icon-builder": "workspace: *",
+    "@varlet/unplugin-icon-builder": "workspace: *",
+    "vite": "5.2.11"
+  }
+}

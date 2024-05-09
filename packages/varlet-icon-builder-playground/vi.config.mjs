@@ -1,4 +1,4 @@
-import { defineConfig } from './dist/index.js'
+import { defineConfig } from '@varlet/icon-builder'
 
 export default defineConfig({
   name: 'i-icons',

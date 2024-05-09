@@ -1,0 +1,94 @@
+{
+  "name": "@varlet/unplugin-icon-builder",
+  "type": "module",
+  "version": "0.0.4",
+  "keywords": [
+    "varlet",
+    "icon",
+    "unplugin"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./astro": {
+      "types": "./dist/astro.d.ts",
+      "import": "./dist/astro.js",
+      "require": "./dist/astro.cjs"
+    },
+    "./vite": {
+      "types": "./dist/vite.d.ts",
+      "import": "./dist/vite.js",
+      "require": "./dist/vite.cjs"
+    },
+    "./webpack": {
+      "types": "./dist/webpack.d.ts",
+      "import": "./dist/webpack.js",
+      "require": "./dist/webpack.cjs"
+    },
+    "./rollup": {
+      "types": "./dist/rollup.d.ts",
+      "import": "./dist/rollup.js",
+      "require": "./dist/rollup.cjs"
+    },
+    "./types": {
+      "types": "./dist/types.d.ts",
+      "import": "./dist/types.js",
+      "require": "./dist/types.cjs"
+    },
+    "./*": "./*"
+  },
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./dist/*",
+        "./*"
+      ]
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "tsup --watch src",
+    "build": "tsup"
+  },
+  "peerDependencies": {
+    "esbuild": "*",
+    "rollup": "^3",
+    "vite": ">=3",
+    "webpack": "^4 || ^5"
+  },
+  "peerDependenciesMeta": {
+    "webpack": {
+      "optional": true
+    },
+    "rollup": {
+      "optional": true
+    },
+    "vite": {
+      "optional": true
+    }
+  },
+  "dependencies": {
+    "unplugin": "^1.5.1",
+    "fs-extra": "11.2.0",
+    "@varlet/icon-builder": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "11.0.4",
+    "@types/node": "^20.10.3",
+    "chalk": "^5.3.0",
+    "fast-glob": "^3.3.2",
+    "rimraf": "^5.0.5",
+    "rollup": "^4.6.1",
+    "tsup": "^8.0.1",
+    "typescript": "^5.3.2",
+    "vite": "^5.0.4"
+  }
+}
