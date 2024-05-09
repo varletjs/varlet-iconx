@@ -31,7 +31,9 @@ export const unpluginFactory: UnpluginFactory<Options | undefined> = (options: O
     name: 'varlet-unplugin-icon-builder',
 
     async buildStart() {
+      console.time()
       await writeVirtualIconFile()
+      console.timeEnd()
     },
 
     async load(id) {
