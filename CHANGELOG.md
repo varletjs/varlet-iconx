@@ -1,3 +1,12 @@
+## [0.1.1](https://github.com/varletjs/varlet-icon-builder/compare/v0.1.0...v0.1.1) (2024-05-13)
+
+
+### Bug Fixes
+
+* **unplugin:** fix fontFamilyClassName defaults value ([b6a0177](https://github.com/varletjs/varlet-icon-builder/commit/b6a0177250c07e7aa903898316284ff264043fc6))
+
+
+
 # [0.1.0](https://github.com/varletjs/varlet-icon-builder/compare/v0.0.4...v0.1.0) (2024-05-13)
 
 
