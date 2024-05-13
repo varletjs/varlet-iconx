@@ -1,3 +1,12 @@
+# [0.1.0](https://github.com/varletjs/varlet-icon-builder/compare/v0.0.4...v0.1.0) (2024-05-13)
+
+
+### Features
+
+* support unplugin icon builder ([9546e76](https://github.com/varletjs/varlet-icon-builder/commit/9546e76c91c94191847921150cf6193a1367c0c7))
+
+
+
 ## [0.0.4](https://github.com/varletjs/varlet-icon-builder/compare/v0.0.3...v0.0.4) (2024-04-24)
 
 
