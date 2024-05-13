@@ -24,19 +24,28 @@ pnpm add @varlet/unplugin-icon-builder -D
 
 ## Usage
 
-### Take vite as an example
+### Example
 
 The project file directory is as follows.
 
 ```
 |-- project
   |-- src
-    |-- main.ts  
+    |-- main.ts
   |-- svg-icons
     |-- account-circle.svg
-  |-- index.html
-  |-- vite.config.ts
 ```
+
+```ts
+// main.ts
+import 'virtual-icons'
+```
+
+```html
+<i class="i-icons i-account-circle"></i>
+```
+
+#### Vite Configuration
 
 ```ts
 // vite.config.ts
@@ -52,13 +61,39 @@ export default defineConfig({
 })
 ```
 
+#### Webpack Configuration
+
 ```ts
-// main.ts
-import 'virtual:icons'
+// vite.config.ts
+const Icon = require('@varlet/unplugin-icon-builder/webpack')
+
+module.exports = {
+  plugins: [
+    Icon.default({ 
+      // See the type definition below for configuration
+    })
+  ],
+}
 ```
 
-```html
-<i class="i-icons i-account-circle"></i>
+#### Vue Cli Configuration
+
+```ts
+// vite.config.ts
+const { defineConfig } = require('@vue/cli-service')
+const Icon = require('@varlet/unplugin-icon-builder/webpack')
+
+module.exports = defineConfig({
+  transpileDependencies: true,
+
+  configureWebpack: {
+    plugins: [
+      Icon.default({ 
+        // See the type definition below for configuration
+      })
+    ],
+  },
+})
 ```
 
 ## Options Type Declaration
@@ -81,7 +116,7 @@ export interface Options {
    */
   dir?: string
   /**
-   * @default `virtual:icons`
+   * @default `virtual-icons`
    * virtual module id.
    */
   moduleId?: string
