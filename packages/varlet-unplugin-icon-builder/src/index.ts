@@ -20,16 +20,14 @@ export const unpluginFactory: UnpluginFactory<Options | undefined> = (options: O
       const { cssTemplate } = await buildIcons({
         name,
         namespace,
-        fontFamilyClassName: fontFamilyClassName ?? name,
+        fontFamilyClassName: fontFamilyClassName ?? namespace,
         entry: dir,
         emitFile: false,
       })
 
       fse.outputFileSync(resolve(process.cwd(), generatedFilename), cssTemplate)
       // eslint-disable-next-line no-empty
-    } catch (e) {
-      
-    }
+    } catch (e) {}
   }
 
   return {

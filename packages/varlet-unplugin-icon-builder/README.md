@@ -91,7 +91,7 @@ export interface Options {
    */
   generatedFilename?: string
   /**
-   * icon font family class name, defaults same as `options.name`.
+   * icon font family class name, defaults same as `options.namespace`.
    */
   fontFamilyClassName?: string
 }
