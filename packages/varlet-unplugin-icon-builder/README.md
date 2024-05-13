@@ -31,8 +31,11 @@ The project file directory is as follows.
 ```
 |-- project
   |-- src
+    |-- main.ts  
   |-- svg-icons
     |-- account-circle.svg
+  |-- index.html
+  |-- vite.config.ts
 ```
 
 ```ts
