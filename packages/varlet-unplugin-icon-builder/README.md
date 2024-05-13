@@ -26,6 +26,15 @@ pnpm add @varlet/unplugin-icon-builder -D
 
 ### Take vite as an example
 
+The project file directory is as follows.
+
+```
+|-- project
+  |-- src
+  |-- svg-icons
+    |-- account-circle.svg
+```
+
 ```ts
 // vite.config.ts
 import { defineConfig } from 'vite'
