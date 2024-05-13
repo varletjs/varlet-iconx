@@ -1,19 +1,8 @@
-<h1 align="center">Varlet Icon Builder</h1>
+## Intro
 
-<p align="center">
-  <a href="https://github.com/varletjs/varlet-icon-builder/blob/main/README.md"> English </a> | 
-  <span>中文</span>
-</p>
-<p align="center">
-  <a href="https://www.npmjs.com/package/@varlet/icon-builder" target="_blank" rel="noopener noreferrer"><img src="https://badgen.net/npm/v/@varlet/icon-builder" alt="NPM Version" /></a>
-  <a href="https://github.com/varletjs/icon-builder/blob/main/LICENCE" target="_blank" rel="noopener noreferrer"><img src="https://badgen.net/github/license/varletjs/varlet-icon-builder" alt="License" /></a>
-</p>
+`@varlet/icon-builder` is a tool to build svg images to icon fonts.
 
-## 介绍
-
-`Varlet Icon Builder` 可以将 svg 图标转换成字体图标
-
-## 安装
+## Installation
 
 ### npm
 
@@ -33,12 +22,21 @@ yarn add @varlet/icon-builder -D
 pnpm add @varlet/icon-builder -D
 ```
 
-## 使用方法
+## Usage
 
-### 配置文件
+### Using Command
+
+```shell
+npx vi build
+
+# watch mode
+npx vi build -w
+```
+
+## Configuration File
 
 ```js
-// vi.config.mjs
+// vi.config.ts
 import { defineConfig } from '@varlet/icon-builder'
 
 export default defineConfig({
@@ -50,42 +48,33 @@ export default defineConfig({
 })
 ```
 
-### 运行命令
-
-```shell
-npx vi build
-
-# watch mode
-npx vi build -w
-```
-
-## 配置文件类型定义
+## Configuration Type Declaration
 
 ```ts
 export interface VIConfig {
   /**
    * @default `varlet-icons`
-   * Font name.
+   * font name.
    */
   name?: string
   /**
    * @default `var-icon`
-   * Font name prefix.
+   * font name prefix.
    */
   namespace?: string
   /**
    * @default `true`
-   * Output base64
+   * output base64
    */
   base64?: boolean
   /**
    * @default `./svg`
-   * SVG icons folder path.
+   * svg icons folder path.
    */
   entry?: string
   /**
    * @default `./dist`
-   * SVG icons folder path.
+   * svg icons folder path.
    */
   output?: string
   /**
@@ -103,6 +92,14 @@ export interface VIConfig {
    * icon font style.
    */
   fontStyle?: string
+  /**
+   * @default `false`
+   * Whether to output files
+   */
+  emitFile?: boolean
+  /**
+   * icon font public path
+   */
   publicPath?: string
 }
 ```

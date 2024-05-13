@@ -1,33 +1,29 @@
-import fse from 'fs-extra'
-import { resolve } from 'path'
-import { pathToFileURL } from 'url'
-
-const { pathExistsSync, statSync } = fse
+import { loadConfig } from 'unconfig'
 
 export interface VIConfig {
   /**
    * @default `varlet-icons`
-   * Font name.
+   * font name.
    */
   name?: string
   /**
    * @default `var-icon`
-   * Font name prefix.
+   * font name prefix.
    */
   namespace?: string
   /**
    * @default `true`
-   * Output base64
+   * output base64
    */
   base64?: boolean
   /**
    * @default `./svg`
-   * SVG icons folder path.
+   * svg icons folder path.
    */
   entry?: string
   /**
    * @default `./dist`
-   * SVG icons folder path.
+   * svg icons folder path.
    */
   output?: string
   /**
@@ -45,23 +41,29 @@ export interface VIConfig {
    * icon font style.
    */
   fontStyle?: string
-  publicPath?: string
   /**
    * @default `false`
    * Whether to output files
    */
   emitFile?: boolean
+  /**
+   * icon font public path
+   */
+  publicPath?: string
 }
 
 export function defineConfig(config: VIConfig) {
   return config
 }
 
-export async function getViConfig(): Promise<Required<VIConfig>> {
-  const VI_CONFIG = resolve(process.cwd(), 'vi.config.mjs')
-  const config: any = pathExistsSync(VI_CONFIG)
-    ? (await import(`${pathToFileURL(VI_CONFIG).href}?_t=${statSync(VI_CONFIG).mtimeMs}`)).default
-    : {}
+export async function getViConfig(): Promise<VIConfig> {
+  const { config } = await loadConfig<VIConfig>({
+    sources: [
+      {
+        files: 'vi.config',
+      },
+    ],
+  })
 
   return config
 }

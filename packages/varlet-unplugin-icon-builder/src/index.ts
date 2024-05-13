@@ -11,20 +11,25 @@ export const unpluginFactory: UnpluginFactory<Options | undefined> = (options: O
     generatedFilename = 'virtual.icons.css',
     name = 'i-icons',
     dir = './svg-icons',
-    fontFamilyClassName = 'i--set',
     namespace = 'i',
+    fontFamilyClassName,
   } = options
 
   async function writeVirtualIconFile() {
-    const { cssTemplate } = await buildIcons({
-      name,
-      namespace,
-      fontFamilyClassName,
-      entry: dir,
-      emitFile: false,
-    })
+    try {
+      const { cssTemplate } = await buildIcons({
+        name,
+        namespace,
+        fontFamilyClassName: fontFamilyClassName ?? name,
+        entry: dir,
+        emitFile: false,
+      })
 
-    fse.outputFileSync(resolve(process.cwd(), generatedFilename), cssTemplate)
+      fse.outputFileSync(resolve(process.cwd(), generatedFilename), cssTemplate)
+      // eslint-disable-next-line no-empty
+    } catch (e) {
+      
+    }
   }
 
   return {

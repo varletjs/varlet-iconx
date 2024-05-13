@@ -1,108 +1,42 @@
-<h1 align="center">Varlet Icon Builder</h1>
+### Intro
 
-<p align="center">
-  <span>English</span> | 
-  <a href="https://github.com/varletjs/varlet-icon-builder/blob/main/README.zh-CN.md">中文</a>
-</p>
-<p align="center">
-  <a href="https://www.npmjs.com/package/@varlet/icon-builder" target="_blank" rel="noopener noreferrer"><img src="https://badgen.net/npm/v/@varlet/icon-builder" alt="NPM Version" /></a>
-  <a href="https://github.com/varletjs/icon-builder/blob/main/LICENCE" target="_blank" rel="noopener noreferrer"><img src="https://badgen.net/github/license/varletjs/varlet-icon-builder" alt="License" /></a>
-</p>
+Varlet Iconx is a collection of tools that provide icon solutions for [varlet](https://github.com/varletjs/varlet).
 
-## Intro
+### The list of tools is as follows
 
-`Varlet Icon Builder` is a tool to build svg images to icon fonts.
+- [@varlet/icon-builder](https://github.com/varletjs/varlet-iconx/tree/main/packages/varlet-icon-builder) is a tool to build svg images to icon fonts.
+- [@varlet/unplugin-icon-builder](https://github.com/varletjs/varlet-iconx/tree/main/packages/varlet-unplugin-icon-builder) is the [unplugin](https://github.com/unjs/unplugin) wrapper of [@varlet/icon-builder](https://github.com/varletjs/varlet-iconx/tree/main/packages/varlet-icon-builder).
 
-## Installation
+### Community
 
-### npm
+* Wechat group 
 
-```shell
-npm i @varlet/icon-builder -D
-```
+<img style="width: 25%" src="https://cdn.jsdelivr.net/gh/varletjs/varlet-static/community.png" />
 
-### yarn
+* Join the [Discord](https://discord.gg/Dmb8ydBHkw)
 
-```shell
-yarn add @varlet/icon-builder -D
-```
+### Thanks to contributors
 
-### pnpm
+<a href="https://github.com/varletjs/varlet/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=varletjs/varlet-iconx" />
+</a>
 
-```shell
-pnpm add @varlet/icon-builder -D
-```
+### Thanks to the following sponsors
 
-## Usage
+<a href="https://cdn.jsdelivr.net/gh/varletjs/varlet-static/sponsorkit/sponsors.svg">
+  <img src="https://cdn.jsdelivr.net/gh/varletjs/varlet-static/sponsorkit/sponsors.svg">
+</a>
 
-### Using Command
+### Sponsor this project
 
-```shell
-npx vi build
+Sponsor this project to support our better creation. It is recommended to use afdian to subscribe, and your avatar will appear in this project.
 
-# watch mode
-npx vi build -w
-```
+#### Afdian
 
-## Configuration File
+<a href="https://afdian.net/a/haoziqaq">https://afdian.net/a/haoziqaq</a>
 
-```js
-// vi.config.mjs
-import { defineConfig } from '@varlet/icon-builder'
+#### Wechat / Alipay
 
-export default defineConfig({
-  name: 'i-icons',
-  namespace: 'i',
-  fontFamilyClassName: 'i--set',
-  entry: './svg-icons',
-  output: './icons',
-})
-```
+<img style="width: 25%" src="https://cdn.jsdelivr.net/gh/varletjs/varlet-static/wechat.jpg" />
+<img style="width: 25%" src="https://cdn.jsdelivr.net/gh/varletjs/varlet-static/alipay.jpg" />
 
-## Configuration Type Declaration
-
-```ts
-export interface VIConfig {
-  /**
-   * @default `varlet-icons`
-   * Font name.
-   */
-  name?: string
-  /**
-   * @default `var-icon`
-   * Font name prefix.
-   */
-  namespace?: string
-  /**
-   * @default `true`
-   * Output base64
-   */
-  base64?: boolean
-  /**
-   * @default `./svg`
-   * SVG icons folder path.
-   */
-  entry?: string
-  /**
-   * @default `./dist`
-   * SVG icons folder path.
-   */
-  output?: string
-  /**
-   * @default `var-icon--set`
-   * icon font family class name.
-   */
-  fontFamilyClassName?: string
-  /**
-   * @default `normal`
-   * icon font weight.
-   */
-  fontWeight?: string
-  /**
-   * @default `normal`
-   * icon font style.
-   */
-  fontStyle?: string
-  publicPath?: string
-}
-```
