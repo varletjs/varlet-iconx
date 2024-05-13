@@ -19,7 +19,6 @@ export const unpluginFactory: UnpluginFactory<Options | undefined> = (options: O
   const generatedFileId = resolve(process.cwd(), generatedFilename)
   const dirId = resolve(process.cwd(), dir)
 
-  console.log(process.env.NODE_ENV)
   if (process.env.NODE_ENV === 'development') {
     chokidar.watch(dirId, { ignoreInitial: true }).on('all', writeVirtualIconFile)
   }
