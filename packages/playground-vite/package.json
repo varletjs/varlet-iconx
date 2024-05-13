@@ -1,0 +1,20 @@
+{
+  "private": true,
+  "version": "0.1.1",
+  "type": "module",
+  "keywords": [
+    "icon",
+    "builder",
+    "playground"
+  ],
+  "license": "MIT",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "@varlet/unplugin-icon-builder": "workspace: *",
+    "vite": "5.2.11"
+  }
+}

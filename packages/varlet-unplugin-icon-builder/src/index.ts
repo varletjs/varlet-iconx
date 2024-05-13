@@ -4,10 +4,11 @@ import { createUnplugin } from 'unplugin'
 import { buildIcons } from '@varlet/icon-builder'
 import { resolve } from 'path'
 import fse from 'fs-extra'
+import chokidar from 'chokidar'
 
 export const unpluginFactory: UnpluginFactory<Options | undefined> = (options: Options = {}) => {
   const {
-    moduleId = 'virtual:icons',
+    moduleId = 'virtual-icons',
     generatedFilename = 'virtual.icons.css',
     name = 'i-icons',
     dir = './svg-icons',
@@ -15,8 +16,21 @@ export const unpluginFactory: UnpluginFactory<Options | undefined> = (options: O
     fontFamilyClassName,
   } = options
 
+  const generatedFileId = resolve(process.cwd(), generatedFilename)
+  const dirId = resolve(process.cwd(), dir)
+
+  console.log(process.env.NODE_ENV)
+  if (process.env.NODE_ENV === 'development') {
+    chokidar.watch(dirId, { ignoreInitial: true }).on('all', writeVirtualIconFile)
+  }
+
   async function writeVirtualIconFile() {
     try {
+      if (!fse.existsSync(dirId) || !fse.readdirSync(dirId).length) {
+        fse.outputFileSync(generatedFileId, '')
+        return
+      }
+
       const { cssTemplate } = await buildIcons({
         name,
         namespace,
@@ -25,43 +39,32 @@ export const unpluginFactory: UnpluginFactory<Options | undefined> = (options: O
         emitFile: false,
       })
 
-      fse.outputFileSync(resolve(process.cwd(), generatedFilename), cssTemplate)
+      let content = ''
+
+      if (fse.existsSync(generatedFileId)) {
+        content = fse.readFileSync(generatedFileId, 'utf-8')
+      }
+
+      if (content === cssTemplate) {
+        return
+      }
+
+      fse.writeFileSync(generatedFileId, cssTemplate)
       // eslint-disable-next-line no-empty
     } catch (e) {}
   }
 
   return {
     name: 'varlet-unplugin-icon-builder',
+    enforce: 'pre',
 
     async buildStart() {
       await writeVirtualIconFile()
     },
 
-    async load(id) {
-      if (id !== moduleId) {
-        return
-      }
-
-      this.addWatchFile(resolve(process.cwd(), generatedFilename))
-      const cssTemplate = fse.readFileSync(resolve(process.cwd(), generatedFilename))
-
-      return `\
-const insertedStyle = document.createElement('style')
-insertedStyle.appendChild(document.createTextNode(String.raw\`${cssTemplate}\`))
-document.head.appendChild(insertedStyle)`
-    },
-
     resolveId(id) {
       if (id === moduleId) {
-        return id
-      }
-
-      return null
-    },
-
-    watchChange(id) {
-      if (id.startsWith(resolve(process.cwd(), dir))) {
-        writeVirtualIconFile()
+        return generatedFileId
       }
     },
   }

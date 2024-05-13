@@ -1,8 +1,8 @@
 import fse from 'fs-extra'
-import slash from 'slash'
 import chokidar from 'chokidar'
 import webfont from 'webfont'
 import logger from './logger.js'
+import { slash } from './utils.js'
 import { resolve } from 'path'
 import { VIConfig, getViConfig } from './config.js'
 
