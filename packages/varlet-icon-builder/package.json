@@ -12,9 +12,9 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/varletjs/varlet-icon-builder"
+    "url": "git+https://github.com/varletjs/varlet-iconx"
   },
-  "bugs": "https://github.com/varletjs/varlet-icon-builder/issues",
+  "bugs": "https://github.com/varletjs/varlet-iconx/issues",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -33,11 +33,7 @@
   ],
   "scripts": {
     "dev": "tsup --watch",
-    "build": "tsup",
-    "release": "pnpm build && vr release",
-    "lint": "eslint --ext .ts,.js",
-    "format": "prettier --write .",
-    "play": "node ./bin/index.js build"
+    "build": "tsup"
   },
   "dependencies": {
     "commander": "^11.1.0",
@@ -57,10 +53,5 @@
     "simple-git-hooks": "^2.9.0",
     "tsup": "^8.0.1",
     "typescript": "^5.2.2"
-  },
-  "packageManager": "pnpm@8.7.5",
-  "engines": {
-    "node": ">=16.0.0",
-    "pnpm": ">=8.0"
   }
 }

@@ -57,9 +57,6 @@
     "webpack": {
       "optional": true
     },
-    "rollup": {
-      "optional": true
-    },
     "vite": {
       "optional": true
     }
