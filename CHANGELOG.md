@@ -1,3 +1,12 @@
+## [0.2.1](https://github.com/varletjs/varlet-icon-builder/compare/v0.2.0...v0.2.1) (2024-05-13)
+
+
+### Bug Fixes
+
+* remove console ([158854d](https://github.com/varletjs/varlet-icon-builder/commit/158854d77741c542292fbabd20d41e0f538b195c))
+
+
+
 # [0.2.0](https://github.com/varletjs/varlet-icon-builder/compare/v0.1.1...v0.2.0) (2024-05-13)
 
 
