@@ -1,3 +1,12 @@
+# [0.2.0](https://github.com/varletjs/varlet-icon-builder/compare/v0.1.1...v0.2.0) (2024-05-13)
+
+
+### Features
+
+* support hmr and webpack ([08e082c](https://github.com/varletjs/varlet-icon-builder/commit/08e082c621b39778e6bfedd127d112bf72db81ca))
+
+
+
 ## [0.1.1](https://github.com/varletjs/varlet-icon-builder/compare/v0.1.0...v0.1.1) (2024-05-13)
 
 
