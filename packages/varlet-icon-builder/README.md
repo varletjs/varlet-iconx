@@ -101,5 +101,34 @@ export interface VIConfig {
    * icon font public path
    */
   publicPath?: string
+  /**
+   * figma parsing options
+   */
+  figma?: {
+    /**
+     * figma token
+     * @see https://www.figma.com/developers/api#authentication
+     */
+    token?: string
+    /**
+     * figma file id
+     */
+    file?: string
+    /**
+     * @default `false`
+     * whether to skip downloading svg files when a file with the same name exists locally
+     */
+    skipExisting?: boolean
+    /**
+     * @default `false`
+     * whether to clear the output directory before downloading
+     */
+    clean?: boolean
+    /**
+     * @default `./svg-icons`
+     * output path
+     */
+    output?: string
+  }
 }
 ```
