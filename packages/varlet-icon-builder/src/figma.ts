@@ -90,7 +90,7 @@ export async function downloadSvgUrls(
 
   await Promise.all(
     Object.entries(svgUrls).map(([id, url]) => {
-      const {name} = icons[id]
+      const { name } = icons[id]
       const target = `${output}/${name}.svg`
 
       if (skipExisting && fse.existsSync(target)) {
@@ -123,7 +123,7 @@ export async function figma(options: FigmaCommandOptions) {
   const {
     token,
     file,
-    output = 'figma-svg',
+    output = 'svg-figma',
     clean = false,
     skipExisting = false,
   } = { ...(config.figma ?? {}), ...options }
@@ -153,6 +153,5 @@ export async function figma(options: FigmaCommandOptions) {
     await downloadSvgUrls(axle, svgUrls, icons, { output: resolve(process.cwd(), output), clean, skipExisting })
   } catch (error: any) {
     logger.error(error.toString())
-    
   }
 }

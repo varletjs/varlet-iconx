@@ -74,7 +74,7 @@ export interface VIConfig {
      */
     clean?: boolean
     /**
-     * @default `./svg-icons`
+     * @default `./svg-figma`
      * output path
      */
     output?: string
