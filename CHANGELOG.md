@@ -1,3 +1,18 @@
+## [0.2.2](https://github.com/varletjs/varlet-icon-builder/compare/v0.2.1...v0.2.2) (2024-05-15)
+
+
+### Bug Fixes
+
+* fix figma default output ([7e7af60](https://github.com/varletjs/varlet-icon-builder/commit/7e7af60e274299198afaa62d161a8f8df3806cb4))
+* fix figma option ([1ceacb8](https://github.com/varletjs/varlet-icon-builder/commit/1ceacb82c492cb5b26ccbbfc4b8a798293f26405))
+
+
+### Features
+
+* support figma command ([a321285](https://github.com/varletjs/varlet-icon-builder/commit/a321285cdf94b40e55c1edd4dc44557aa4a8ed8b))
+
+
+
 ## [0.2.1](https://github.com/varletjs/varlet-icon-builder/compare/v0.2.0...v0.2.1) (2024-05-13)
 
 
