@@ -6,8 +6,9 @@ import fse from 'fs-extra'
 import logger from './logger.js'
 
 export interface FigmaCommandOptions {
-  file?: string
   token?: string
+  file?: string
+  pageName?: string
   skipExisting?: boolean
   clean?: boolean
   output?: string
@@ -34,19 +35,24 @@ export interface Icon {
 
 export type Icons = Record<string, Icon>
 
-export function parseIcons(document: FigmaDocument) {
-  return document.children.reduce((icons, canvas) => {
-    canvas.children?.forEach((node) => {
+export function parseIcons(document: FigmaDocument, pageName: string) {
+  const iconsPageNode = document.children.find((node) => node.name.toLowerCase() === pageName.toLowerCase())
+  if (!iconsPageNode) {
+    return {}
+  }
+
+  return (
+    iconsPageNode.children?.reduce((icons, node) => {
       if (node.type === 'FRAME' || node.type === 'COMPONENT') {
         icons[node.id] = {
           id: node.id,
           name: kebabCase(node.name.toLowerCase()),
         }
       }
-    })
 
-    return icons
-  }, {} as Icons)
+      return icons
+    }, {} as Icons) ?? {}
+  )
 }
 
 export async function getDocument(axle: AxleInstance, file: string) {
@@ -123,6 +129,7 @@ export async function figma(options: FigmaCommandOptions) {
   const {
     token,
     file,
+    pageName = 'Icons',
     output = 'svg-figma',
     clean = false,
     skipExisting = false,
@@ -138,6 +145,8 @@ export async function figma(options: FigmaCommandOptions) {
     return
   }
 
+  console.log(token)
+
   const axle = createAxle({
     headers: {
       'X-Figma-Token': token,
@@ -148,7 +157,13 @@ export async function figma(options: FigmaCommandOptions) {
 
   try {
     const document = await getDocument(axle, file)
-    const icons = parseIcons(document)
+    const icons = parseIcons(document, pageName)
+
+    if (Object.keys(icons).length === 0) {
+      logger.error(`No icons found in the "${pageName}" page!`)
+      return
+    }
+
     const svgUrls = await getSvgUrls(axle, file, icons)
     await downloadSvgUrls(axle, svgUrls, icons, { output: resolve(process.cwd(), output), clean, skipExisting })
   } catch (error: any) {

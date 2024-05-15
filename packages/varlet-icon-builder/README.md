@@ -128,6 +128,11 @@ export interface VIConfig {
      */
     file?: string
     /**
+     * @default `Icons`
+     * figma icons page name
+     */
+    pageName?: string
+    /**
      * @default `false`
      * whether to skip downloading svg files when a file with the same name exists locally
      */
