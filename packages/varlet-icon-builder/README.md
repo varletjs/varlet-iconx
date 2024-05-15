@@ -24,13 +24,25 @@ pnpm add @varlet/icon-builder -D
 
 ## Usage
 
-### Using Command
+### Commands
+
+#### build
+
+Build svg into icon font.
 
 ```shell
 npx vi build
 
 # watch mode
 npx vi build -w
+```
+
+#### figma
+
+Pull the svg icon in the figma document to the local.
+
+```shell
+npx vi figma -t <token> -f <file>
 ```
 
 ## Configuration File
@@ -45,6 +57,7 @@ export default defineConfig({
   fontFamilyClassName: 'i--set',
   entry: './svg-icons',
   output: './icons',
+  figma: {}
 })
 ```
 
