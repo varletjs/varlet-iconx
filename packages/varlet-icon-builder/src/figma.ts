@@ -127,7 +127,7 @@ export async function downloadSvgUrls(
 export async function figma(options: FigmaCommandOptions) {
   const config = (await getViConfig()) ?? {}
   const {
-    token,
+    token = process.env.VI_FIGMA_TOKEN,
     file,
     pageName = 'Icons',
     output = 'svg-figma',
@@ -144,8 +144,6 @@ export async function figma(options: FigmaCommandOptions) {
     logger.error('figma file is required!')
     return
   }
-
-  console.log(token)
 
   const axle = createAxle({
     headers: {
