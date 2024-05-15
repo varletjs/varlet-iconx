@@ -1,3 +1,12 @@
+## [0.2.4](https://github.com/varletjs/varlet-icon-builder/compare/v0.2.3...v0.2.4) (2024-05-15)
+
+
+### Features
+
+* support env token ([60119a2](https://github.com/varletjs/varlet-icon-builder/commit/60119a28509ad913cd915120bb62811b94e3089e))
+
+
+
 ## [0.2.3](https://github.com/varletjs/varlet-icon-builder/compare/v0.2.2...v0.2.3) (2024-05-15)
 
 
