@@ -42,7 +42,7 @@ import 'virtual-icons'
 ```
 
 ```html
-<i class="i-icons i-account-circle"></i>
+<i class="i i-account-circle"></i>
 ```
 
 #### Vite Configuration
