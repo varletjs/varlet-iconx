@@ -1,3 +1,12 @@
+## [0.2.3](https://github.com/varletjs/varlet-icon-builder/compare/v0.2.2...v0.2.3) (2024-05-15)
+
+
+### Features
+
+* support pageName ([c94e62c](https://github.com/varletjs/varlet-icon-builder/commit/c94e62ca5d41a12ddc9c4764937332903e7e445c))
+
+
+
 ## [0.2.2](https://github.com/varletjs/varlet-icon-builder/compare/v0.2.1...v0.2.2) (2024-05-15)
 
 
