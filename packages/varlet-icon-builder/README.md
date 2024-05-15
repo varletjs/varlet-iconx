@@ -42,7 +42,9 @@ npx vi build -w
 Pull the svg icon in the figma document to the local.
 
 ```shell
-npx vi figma -t <token> -f <file>
+npx vi figma -f <file> -t <token>
+#or token from process.env
+VI_FIGMA_TOKEN=<token> npx vi figma -f <file>
 ```
 
 ## Configuration File
