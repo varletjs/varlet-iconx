@@ -2,7 +2,7 @@ import fse from 'fs-extra'
 import chokidar from 'chokidar'
 import webfont from 'webfont'
 import logger from './logger.js'
-import { slash } from './utils.js'
+import { resolvePath, slash } from './utils.js'
 import { resolve } from 'path'
 import { VIConfig, getViConfig } from './config.js'
 
@@ -113,15 +113,14 @@ ${icons
 export function getIo(viConfig: VIConfig) {
   const { entry = './svg', output = './dist' } = viConfig
   const io = {
-    entry: resolve(process.cwd(), entry),
-    output: resolve(process.cwd(), output),
+    entry: resolvePath(entry),
+    output: resolvePath(output),
   }
   return io
 }
 
 export async function build({ watch = false }: { watch: boolean }) {
   const viConfig = await getViConfig()
-
   const io = getIo(viConfig)
   const task = () => buildIcons(viConfig)
 

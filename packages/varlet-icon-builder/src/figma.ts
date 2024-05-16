@@ -1,7 +1,7 @@
 import { AxleInstance, createAxle } from '@varlet/axle'
 import { kebabCase } from '@varlet/shared'
-import { resolve } from 'path'
 import { getViConfig } from './config.js'
+import { resolvePath } from './utils.js'
 import fse from 'fs-extra'
 import logger from './logger.js'
 
@@ -163,7 +163,7 @@ export async function figma(options: FigmaCommandOptions) {
     }
 
     const svgUrls = await getSvgUrls(axle, file, icons)
-    await downloadSvgUrls(axle, svgUrls, icons, { output: resolve(process.cwd(), output), clean, skipExisting })
+    await downloadSvgUrls(axle, svgUrls, icons, { output: resolvePath(output), clean, skipExisting })
   } catch (error: any) {
     logger.error(error.toString())
   }

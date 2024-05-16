@@ -2,9 +2,13 @@ import type { UnpluginFactory } from 'unplugin'
 import type { Options } from './types'
 import { createUnplugin } from 'unplugin'
 import { buildIcons } from '@varlet/icon-builder'
-import { resolve } from 'path'
+import { isAbsolute, resolve } from 'path'
 import fse from 'fs-extra'
 import chokidar from 'chokidar'
+
+export function resolvePath(path: string) {
+  return isAbsolute(path) ? path : resolve(process.cwd(), path)
+}
 
 export const unpluginFactory: UnpluginFactory<Options | undefined> = (options: Options = {}) => {
   const {
@@ -16,8 +20,8 @@ export const unpluginFactory: UnpluginFactory<Options | undefined> = (options: O
     fontFamilyClassName,
   } = options
 
-  const generatedFileId = resolve(process.cwd(), generatedFilename)
-  const dirId = resolve(process.cwd(), dir)
+  const generatedFileId = resolvePath(generatedFilename)
+  const dirId = resolvePath(dir)
 
   if (process.env.NODE_ENV === 'development') {
     chokidar.watch(dirId, { ignoreInitial: true }).on('all', writeVirtualIconFile)
