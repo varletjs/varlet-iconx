@@ -1,3 +1,12 @@
+## [0.2.5](https://github.com/varletjs/varlet-icon-builder/compare/v0.2.4...v0.2.5) (2024-05-16)
+
+
+### Features
+
+* support absolute path ([32a725c](https://github.com/varletjs/varlet-icon-builder/commit/32a725cae997165c3c8d8babf61ec7d538c3cac1))
+
+
+
 ## [0.2.4](https://github.com/varletjs/varlet-icon-builder/compare/v0.2.3...v0.2.4) (2024-05-15)
 
 
