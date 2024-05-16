@@ -1,3 +1,12 @@
+## [0.2.6](https://github.com/varletjs/varlet-icon-builder/compare/v0.2.5...v0.2.6) (2024-05-16)
+
+
+### Features
+
+* generate virtual css by output file ([eb7bf77](https://github.com/varletjs/varlet-icon-builder/commit/eb7bf770eae2c54f851e1d6ccd931a76d0bf2c1f))
+
+
+
 ## [0.2.5](https://github.com/varletjs/varlet-icon-builder/compare/v0.2.4...v0.2.5) (2024-05-16)
 
 
