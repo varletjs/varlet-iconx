@@ -52,7 +52,7 @@ export const unpluginFactory: UnpluginFactory<Options | undefined> = (options: O
         return
       }
 
-      fse.writeFileSync(generatedFileId, cssTemplate)
+      fse.outputFileSync(generatedFileId, cssTemplate)
       // eslint-disable-next-line no-empty
     } catch (e) {}
   }
