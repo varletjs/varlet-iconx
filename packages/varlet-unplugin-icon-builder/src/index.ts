@@ -82,7 +82,7 @@ export const unpluginFactory: UnpluginFactory<Options | undefined> = (options: O
   }
 
   function updateGraphNode(eventName: string, path: string) {
-    const value = JSON.parse(JSON.stringify(graph.get(path) ?? []))
+    const value = graph.get(path) ?? []
 
     if (eventName === 'add' || eventName === 'change') {
       const content = fse.readFileSync(path, 'utf-8')
