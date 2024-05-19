@@ -1,6 +1,6 @@
 {
   "root": true,
-  "version": "0.2.7",
+  "version": "0.2.8",
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "postinstall": "simple-git-hooks",

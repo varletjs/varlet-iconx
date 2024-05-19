@@ -1,3 +1,12 @@
+## [0.2.8](https://github.com/varletjs/varlet-icon-builder/compare/v0.2.7...v0.2.8) (2024-05-19)
+
+
+### Bug Fixes
+
+* avoid dir empty ([87c089d](https://github.com/varletjs/varlet-icon-builder/commit/87c089d3934273a75210dc24324533c7eea2ab46))
+
+
+
 ## [0.2.7](https://github.com/varletjs/varlet-icon-builder/compare/v0.2.6...v0.2.7) (2024-05-19)
 
 
