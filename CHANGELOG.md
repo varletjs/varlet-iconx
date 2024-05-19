@@ -1,3 +1,12 @@
+## [0.2.11](https://github.com/varletjs/varlet-icon-builder/compare/v0.2.10...v0.2.11) (2024-05-19)
+
+
+### Bug Fixes
+
+* glob error ([6d24082](https://github.com/varletjs/varlet-icon-builder/commit/6d24082b0efa40fe1395c01584358ef345e48d69))
+
+
+
 ## [0.2.10](https://github.com/varletjs/varlet-icon-builder/compare/v0.2.9...v0.2.10) (2024-05-19)
 
 
