@@ -51,6 +51,11 @@ export interface VIConfig {
    */
   publicPath?: string
   /**
+   * icon name glob matcher
+   * @default '*'
+   */
+  matcher?: string
+  /**
    * figma parsing options
    */
   figma?: {

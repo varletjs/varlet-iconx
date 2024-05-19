@@ -5,4 +5,5 @@ export interface Options {
   name?: string
   namespace?: string
   fontFamilyClassName?: string
+  onDemand?: boolean
 }

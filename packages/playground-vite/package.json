@@ -13,6 +13,9 @@
     "build": "vite build",
     "preview": "vite preview"
   },
+  "dependencies": {
+    "vue": "3.4.27"
+  },
   "devDependencies": {
     "@varlet/unplugin-icon-builder": "workspace: *",
     "@varlet/icon-builder": "workspace: *",

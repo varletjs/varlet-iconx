@@ -39,6 +39,10 @@ importers:
         version: 5.2.2
 
   packages/playground-vite:
+    dependencies:
+      vue:
+        specifier: 3.4.27
+        version: 3.4.27(typescript@5.2.2)
     devDependencies:
       '@varlet/icon-builder':
         specifier: 'workspace: *'
@@ -135,9 +139,15 @@ importers:
       '@varlet/icon-builder':
         specifier: workspace:*
         version: link:../varlet-icon-builder
+      '@varlet/shared':
+        specifier: 3.2.11-alpha.1716133168406
+        version: 3.2.11-alpha.1716133168406
       chokidar:
         specifier: 3.6.0
         version: 3.6.0
+      fast-glob:
+        specifier: ^3.3.2
+        version: 3.3.2
       fs-extra:
         specifier: 11.2.0
         version: 11.2.0
@@ -157,9 +167,6 @@ importers:
       chalk:
         specifier: ^5.3.0
         version: 5.3.0
-      fast-glob:
-        specifier: ^3.3.2
-        version: 3.3.2
       rimraf:
         specifier: ^5.0.5
         version: 5.0.5
@@ -2610,6 +2617,10 @@ packages:
 
   /@varlet/shared@2.20.3:
     resolution: {integrity: sha512-MgLDRYfrGgKqu8Vg2kfRVRGRZE2d8CH0f75vph5h4AG+Clm+A7FgUZLaVTriMWuS6wXrrrceSgX5kNmb/lFShQ==}
+    dev: false
+
+  /@varlet/shared@3.2.11-alpha.1716133168406:
+    resolution: {integrity: sha512-tE7sALvgVocEm8Yk0W424tdbstxoWWp0UR5Ne8Kn5WvilndhdxOONkYsUoVMyeq2/kAX+2nKTnrYx90wsE365Q==}
     dev: false
 
   /@varlet/shared@3.2.9:

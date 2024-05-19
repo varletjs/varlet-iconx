@@ -19,9 +19,9 @@ function clearOutputs(fontsDir: string, cssDir: string) {
   ensureDirSync(cssDir)
 }
 
-function buildWebFont(name: string, entry: string) {
+function buildWebFont(name: string, entry: string, matcher: string) {
   return webfont.default({
-    files: `${slash(entry)}/*.svg`,
+    files: `${slash(entry)}/${matcher}.svg`,
     fontName: name,
     formats: ['ttf'],
     fontHeight: 512,
@@ -37,6 +37,7 @@ export async function buildIcons(viConfig: VIConfig) {
     fontFamilyClassName = 'var-icon--set',
     fontWeight = 'normal',
     fontStyle = 'normal',
+    matcher = '*',
     publicPath,
     emitFile = true,
   } = viConfig
@@ -49,7 +50,7 @@ export async function buildIcons(viConfig: VIConfig) {
     clearOutputs(fontsDir, cssDir)
   }
 
-  const { ttf, glyphsData } = await buildWebFont(name, io.entry)
+  const { ttf, glyphsData } = await buildWebFont(name, io.entry, matcher)
 
   const icons: { name: string; pointCode: string }[] = glyphsData.map((i: any) => ({
     name: i.metadata.name,
