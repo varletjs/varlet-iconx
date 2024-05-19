@@ -41,7 +41,11 @@ export const unpluginFactory: UnpluginFactory<Options | undefined> = (options: O
     if (onDemand) {
       const { include, exclude } = getOnDemandFilter()
       chokidar.watch(include, { ignoreInitial: true, ignored: exclude }).on('all', (eventName, path) => {
-        updateGraphNode(eventName, path)
+        const isSame = updateGraphNode(eventName, path)
+        if (isSame) {
+          return
+        }
+        // graph node is same after update, no need to update virtual icon file
         writeVirtualIconFileWithDebounce()
       })
     }
@@ -73,7 +77,13 @@ export const unpluginFactory: UnpluginFactory<Options | undefined> = (options: O
     })
   }
 
+  function isSameValue(value: string[], target: string[]) {
+    return value.sort().join('/') === target.sort().join('/')
+  }
+
   function updateGraphNode(eventName: string, path: string) {
+    const value = JSON.parse(JSON.stringify(graph.get(path) ?? []))
+
     if (eventName === 'add' || eventName === 'change') {
       const content = fse.readFileSync(path, 'utf-8')
       const existedTokens = tokens.filter((token) => content.includes(token))
@@ -83,10 +93,13 @@ export const unpluginFactory: UnpluginFactory<Options | undefined> = (options: O
       } else {
         graph.delete(path)
       }
+
+      return isSameValue(value, existedTokens)
     }
 
     if (eventName === 'unlink') {
       graph.delete(path)
+      return isSameValue(value, [])
     }
   }
 
