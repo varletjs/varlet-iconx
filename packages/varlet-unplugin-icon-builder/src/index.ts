@@ -61,10 +61,8 @@ export const unpluginFactory: UnpluginFactory<Options | undefined> = (options: O
 
   function initOnDemand() {
     if (onDemand) {
-      console.time('init on demand')
       updateTokens()
       updateGraph()
-      console.timeEnd('init on demand')
     }
   }
 
