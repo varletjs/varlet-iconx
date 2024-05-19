@@ -1,3 +1,17 @@
+## [0.2.7](https://github.com/varletjs/varlet-icon-builder/compare/v0.2.6...v0.2.7) (2024-05-19)
+
+
+### Bug Fixes
+
+* fix playground ([d7e8bd3](https://github.com/varletjs/varlet-icon-builder/commit/d7e8bd34b3f3573f13b062c8693f58f1c71dc530))
+
+
+### Features
+
+* support on demand ([c462e9e](https://github.com/varletjs/varlet-icon-builder/commit/c462e9e8de55dc090dd661385a2a0e64d71857b2))
+
+
+
 ## [0.2.6](https://github.com/varletjs/varlet-icon-builder/compare/v0.2.5...v0.2.6) (2024-05-16)
 
 
