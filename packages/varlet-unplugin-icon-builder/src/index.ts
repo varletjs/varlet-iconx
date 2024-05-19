@@ -2,8 +2,8 @@ import type { UnpluginFactory } from 'unplugin'
 import type { Options } from './types'
 import { createUnplugin } from 'unplugin'
 import { buildIcons } from '@varlet/icon-builder'
-import { isAbsolute, resolve } from 'path'
-import { debounce, isPlainObject, uniq } from '@varlet/shared'
+import { isAbsolute, resolve, basename } from 'path'
+import { debounce, isPlainObject, uniq, slash } from '@varlet/shared'
 import glob from 'fast-glob'
 import fse from 'fs-extra'
 import chokidar from 'chokidar'
@@ -110,8 +110,8 @@ export const unpluginFactory: UnpluginFactory<Options | undefined> = (options: O
       return
     }
 
-    const files = fse.readdirSync(dirId)
-    const svgTokens = files.filter((file) => file.endsWith('.svg')).map((file) => file.replace(/\.svg$/, ''))
+    const svgTokens = glob.sync(`${slash(dirId)}/**/*.svg`).map((file) => basename(file).replace('.svg', ''))
+
     tokens.push(...svgTokens)
   }
 
@@ -165,8 +165,9 @@ export const unpluginFactory: UnpluginFactory<Options | undefined> = (options: O
       }
 
       fse.outputFileSync(generatedFileId, cssTemplate)
-      // eslint-disable-next-line no-empty
-    } catch (e) {}
+    } catch (e) {
+      console.error(e)
+    }
   }
 
   return {

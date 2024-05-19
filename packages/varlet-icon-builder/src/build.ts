@@ -21,7 +21,7 @@ function clearOutputs(fontsDir: string, cssDir: string) {
 
 function buildWebFont(name: string, entry: string, matcher: string) {
   return webfont.default({
-    files: `${slash(entry)}/${matcher}.svg`,
+    files: `${slash(entry)}/**/${matcher}.svg`,
     fontName: name,
     formats: ['ttf'],
     fontHeight: 512,
