@@ -5,5 +5,10 @@ export interface Options {
   name?: string
   namespace?: string
   fontFamilyClassName?: string
-  onDemand?: boolean
+  onDemand?:
+    | boolean
+    | {
+        include?: string[]
+        exclude?: string[]
+      }
 }

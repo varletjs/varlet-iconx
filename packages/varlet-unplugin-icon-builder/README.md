@@ -129,5 +129,21 @@ export interface Options {
    * icon font family class name, defaults same as `options.namespace`.
    */
   fontFamilyClassName?: string
+  /**
+   * @default `false`
+   * on demand options.
+   */
+  onDemand: boolean | {
+    /**
+     * @default `['./src/**/*.{vue,jsx,tsx,js,ts}']`
+     * files to watch for changes, node_modules will always be ignored.
+     */
+    include?: string[]
+    /**
+     * @default `['./src/**/*.{vue,jsx,tsx,js,ts}']`
+     * files to exclude from watching.
+     */
+    exclude?: string[] 
+  }
 }
 ```

@@ -3,7 +3,7 @@ import type { Options } from './types'
 import { createUnplugin } from 'unplugin'
 import { buildIcons } from '@varlet/icon-builder'
 import { isAbsolute, resolve } from 'path'
-import { debounce, uniq } from '@varlet/shared'
+import { debounce, isPlainObject, uniq } from '@varlet/shared'
 import glob from 'fast-glob'
 import fse from 'fs-extra'
 import chokidar from 'chokidar'
@@ -27,23 +27,35 @@ export const unpluginFactory: UnpluginFactory<Options | undefined> = (options: O
   const dirId = resolvePath(dir)
   const graph = new Map<string, string[]>()
   const tokens: string[] = []
-  const writeVirtualIconFileWithDebounce = debounce(() => writeVirtualIconFile(), 200)
+  const writeVirtualIconFileWithDebounce = debounce(writeVirtualIconFile, 200)
+  const initOnDemandWithDebounce = debounce(initOnDemand, 200)
 
   initOnDemand()
 
   if (process.env.NODE_ENV === 'development') {
-    chokidar.watch(dirId, { ignoreInitial: true }).on('all', async () => {
-      initOnDemand()
-      await writeVirtualIconFile()
+    chokidar.watch(dirId, { ignoreInitial: true }).on('all', () => {
+      initOnDemandWithDebounce()
+      writeVirtualIconFileWithDebounce()
     })
 
     if (onDemand) {
-      chokidar
-        .watch(['./*.html', './src/**'], { ignoreInitial: true, ignored: ['node_modules'] })
-        .on('all', (eventName, path) => {
-          updateGraphNode(eventName, path)
-          writeVirtualIconFileWithDebounce()
-        })
+      const { include, exclude } = getOnDemandFilter()
+      chokidar.watch(include, { ignoreInitial: true, ignored: exclude }).on('all', (eventName, path) => {
+        updateGraphNode(eventName, path)
+        writeVirtualIconFileWithDebounce()
+      })
+    }
+  }
+
+  function getOnDemandFilter() {
+    const defaultInclude = ['./src/**/*.{vue,jsx,tsx,js,ts}']
+    const internalInclude = ['node_modules', generatedFileId]
+    const include = isPlainObject(onDemand) ? onDemand.include ?? defaultInclude : defaultInclude
+    const exclude = isPlainObject(onDemand) ? [...internalInclude, ...(onDemand.exclude ?? [])] : internalInclude
+
+    return {
+      include,
+      exclude,
     }
   }
 
@@ -57,7 +69,8 @@ export const unpluginFactory: UnpluginFactory<Options | undefined> = (options: O
   }
 
   function updateGraph() {
-    glob.sync(['./*.html', './src/**'], { ignore: ['node_modules'] }).forEach((path) => {
+    const { include, exclude } = getOnDemandFilter()
+    glob.sync(include, { ignore: exclude }).forEach((path) => {
       updateGraphNode('add', path)
     })
   }
