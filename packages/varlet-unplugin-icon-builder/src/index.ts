@@ -91,9 +91,14 @@ export const unpluginFactory: UnpluginFactory<Options | undefined> = (options: O
   }
 
   function updateTokens() {
+    tokens.length = 0
+
+    if (!fse.existsSync(dirId)) {
+      return
+    }
+
     const files = fse.readdirSync(dirId)
     const svgTokens = files.filter((file) => file.endsWith('.svg')).map((file) => file.replace(/\.svg$/, ''))
-    tokens.length = 0
     tokens.push(...svgTokens)
   }
 
