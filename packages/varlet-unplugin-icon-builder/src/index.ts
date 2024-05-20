@@ -71,6 +71,7 @@ export const unpluginFactory: UnpluginFactory<Options | undefined> = (options: O
   }
 
   function updateGraph() {
+    graph.clear()
     const { include, exclude } = getOnDemandFilter()
     glob.sync(include, { ignore: exclude }).forEach((path) => {
       updateGraphNode('add', path)
@@ -82,11 +83,16 @@ export const unpluginFactory: UnpluginFactory<Options | undefined> = (options: O
   }
 
   function updateGraphNode(eventName: string, path: string) {
+    path = resolvePath(path)
     const value = graph.get(path) ?? []
 
     if (eventName === 'add' || eventName === 'change') {
       const content = fse.readFileSync(path, 'utf-8')
-      const existedTokens = tokens.filter((token) => content.includes(token))
+      const existedTokens = tokens.filter(
+        (token) =>
+          new RegExp(`(?<!-)\\b${token}\\b(?!-)`).test(content) ||
+          new RegExp(`(?<!-)\\b${namespace}-${token}\\b(?!-)`).test(content),
+      )
 
       if (existedTokens.length > 0) {
         graph.set(path, existedTokens)
