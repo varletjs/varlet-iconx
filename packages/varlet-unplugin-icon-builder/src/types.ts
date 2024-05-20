@@ -1,5 +1,6 @@
 export interface Options {
   dir?: string
+  lib?: string
   moduleId?: string
   generatedFilename?: string
   name?: string

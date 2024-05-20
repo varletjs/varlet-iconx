@@ -51,10 +51,9 @@ export interface VIConfig {
    */
   publicPath?: string
   /**
-   * icon name glob matcher
-   * @default '*'
+   * icon filenames, e.g. ['window-close', 'cog']
    */
-  matcher?: string
+  filenames?: string[]
   /**
    * figma parsing options
    */

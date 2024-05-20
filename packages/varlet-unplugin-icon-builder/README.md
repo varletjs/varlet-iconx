@@ -116,6 +116,10 @@ export interface Options {
    */
   dir?: string
   /**
+   * svg library, it can be understood as dir in node_modules, 'lib' priority is greater than dir.
+   */
+  lib?: string
+  /**
    * @default `virtual-icons`
    * virtual module id.
    */

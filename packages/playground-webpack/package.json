@@ -11,6 +11,7 @@
   },
   "devDependencies": {
     "@varlet/unplugin-icon-builder": "workspace:*",
+    "@varlet/test-icons": "workspace: *",
     "@vue/cli-plugin-babel": "~5.0.0",
     "@vue/cli-plugin-typescript": "~5.0.0",
     "@vue/cli-service": "~5.0.0",

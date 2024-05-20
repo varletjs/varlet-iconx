@@ -19,6 +19,7 @@
   "devDependencies": {
     "@varlet/unplugin-icon-builder": "workspace: *",
     "@varlet/icon-builder": "workspace: *",
+    "@varlet/test-icons": "workspace: *",
     "vite": "5.2.11",
     "@vitejs/plugin-vue": "5.0.4"
   }

@@ -42,7 +42,8 @@
     }
   },
   "files": [
-    "dist"
+    "dist",
+    "cjs"
   ],
   "scripts": {
     "dev": "tsup --watch src",

@@ -5,6 +5,6 @@ module.exports = defineConfig({
   transpileDependencies: true,
 
   configureWebpack: {
-    plugins: [Icon.default({ onDemand: true })],
+    plugins: [Icon.default()],
   },
 })

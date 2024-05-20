@@ -12,8 +12,15 @@ export function resolvePath(path: string) {
   return isAbsolute(path) ? path : resolve(process.cwd(), path)
 }
 
+export function resolveLib(lib: string) {
+  const path = resolvePath(`./node_modules/${lib}`)
+
+  return fse.existsSync(path) ? path : ''
+}
+
 export const unpluginFactory: UnpluginFactory<Options | undefined> = (options: Options = {}) => {
   const {
+    lib,
     moduleId = 'virtual-icons',
     generatedFilename = 'virtual.icons.css',
     name = 'i-icons',
@@ -22,9 +29,17 @@ export const unpluginFactory: UnpluginFactory<Options | undefined> = (options: O
     fontFamilyClassName,
     onDemand = false,
   } = options
+  const libId = lib ? resolveLib(lib) : ''
+  if (lib && !libId) {
+    console.warn(`cannot resolve lib, fallback to dir ${dir}`)
+  }
+
+  const dirId = resolvePath(dir)
+  if (!libId && !fse.existsSync(dirId)) {
+    throw new Error(`cannot resolve dir, please check ${dirId}`)
+  }
 
   const generatedFileId = resolvePath(generatedFilename)
-  const dirId = resolvePath(dir)
   const graph = new Map<string, string[]>()
   const tokens: string[] = []
   const writeVirtualIconFileWithDebounce = debounce(writeVirtualIconFile, 200)
@@ -34,10 +49,12 @@ export const unpluginFactory: UnpluginFactory<Options | undefined> = (options: O
   const wait = writeVirtualIconFile()
 
   if (process.env.NODE_ENV === 'development') {
-    chokidar.watch(dirId, { ignoreInitial: true }).on('all', () => {
-      initOnDemandWithDebounce()
-      writeVirtualIconFileWithDebounce()
-    })
+    if (!libId) {
+      chokidar.watch(dirId, { ignoreInitial: true }).on('all', () => {
+        initOnDemandWithDebounce()
+        writeVirtualIconFileWithDebounce()
+      })
+    }
 
     if (onDemand) {
       const { include, exclude } = getOnDemandFilter()
@@ -50,6 +67,10 @@ export const unpluginFactory: UnpluginFactory<Options | undefined> = (options: O
         writeVirtualIconFileWithDebounce()
       })
     }
+  }
+
+  function getLibIdOrDirId() {
+    return libId || dirId
   }
 
   function getOnDemandFilter() {
@@ -112,37 +133,29 @@ export const unpluginFactory: UnpluginFactory<Options | undefined> = (options: O
 
   function updateTokens() {
     tokens.length = 0
-
-    if (!fse.existsSync(dirId)) {
-      return
-    }
-
-    const svgTokens = glob.sync(`${slash(dirId)}/**/*.svg`).map((file) => basename(file).replace('.svg', ''))
-
+    const svgTokens = getSvgTokens()
     tokens.push(...svgTokens)
   }
 
-  function getMatcher() {
+  function getSvgTokens() {
+    return glob.sync(`${slash(getLibIdOrDirId())}/**/*.svg`).map((file) => basename(file).replace('.svg', ''))
+  }
+
+  function getFilenames() {
     const tokens: string[] = []
+
     graph.forEach((value) => {
       tokens.push(...value)
     })
 
-    const uniqTokens = uniq(tokens)
-    if (uniqTokens.length === 0) {
-      return
-    }
-
-    if (uniqTokens.length === 1) {
-      return uniqTokens[0]
-    }
-
-    return `{${uniq(tokens).join(',')}}`
+    return uniq(tokens)
   }
 
   async function writeVirtualIconFile() {
     try {
-      if (!fse.existsSync(dirId) || !fse.readdirSync(dirId).length) {
+      const libIdOrDirId = getLibIdOrDirId()
+
+      if (!fse.readdirSync(libIdOrDirId).length) {
         fse.outputFileSync(generatedFileId, '')
         return
       }
@@ -153,12 +166,12 @@ export const unpluginFactory: UnpluginFactory<Options | undefined> = (options: O
       }
 
       const { cssTemplate } = await buildIcons({
+        emitFile: false,
         name,
         namespace,
         fontFamilyClassName: fontFamilyClassName ?? namespace,
-        entry: dir,
-        emitFile: false,
-        matcher: onDemand ? getMatcher() : '*',
+        entry: libIdOrDirId,
+        filenames: onDemand ? getFilenames() : undefined,
       })
 
       let content = ''

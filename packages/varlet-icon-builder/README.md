@@ -117,6 +117,10 @@ export interface VIConfig {
    */
   publicPath?: string
   /**
+   * icon filenames, e.g. ['window-close', 'cog']
+   */
+  filenames?: string[]
+  /**
    * figma parsing options
    */
   figma?: {
