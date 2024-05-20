@@ -1,3 +1,12 @@
+## [0.2.13](https://github.com/varletjs/varlet-icon-builder/compare/v0.2.12...v0.2.13) (2024-05-20)
+
+
+### Bug Fixes
+
+* **webpack:** loop rebuild error ([ec736d3](https://github.com/varletjs/varlet-icon-builder/commit/ec736d33652da8da3133a69367618e27aebd7828))
+
+
+
 ## [0.2.12](https://github.com/varletjs/varlet-icon-builder/compare/v0.2.11...v0.2.12) (2024-05-20)
 
 
