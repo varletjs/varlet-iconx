@@ -31,6 +31,7 @@ export const unpluginFactory: UnpluginFactory<Options | undefined> = (options: O
   const initOnDemandWithDebounce = debounce(initOnDemand, 200)
 
   initOnDemand()
+  const wait = writeVirtualIconFile()
 
   if (process.env.NODE_ENV === 'development') {
     chokidar.watch(dirId, { ignoreInitial: true }).on('all', () => {
@@ -181,10 +182,10 @@ export const unpluginFactory: UnpluginFactory<Options | undefined> = (options: O
     enforce: 'pre',
 
     async buildStart() {
-      await writeVirtualIconFile()
+      await wait
     },
 
-    resolveId(id) {
+    async resolveId(id) {
       if (id === moduleId) {
         return generatedFileId
       }
