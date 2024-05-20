@@ -1,3 +1,12 @@
+## [0.2.12](https://github.com/varletjs/varlet-icon-builder/compare/v0.2.11...v0.2.12) (2024-05-20)
+
+
+### Bug Fixes
+
+* graph path error and optimize token matcher ([ebdf116](https://github.com/varletjs/varlet-icon-builder/commit/ebdf116287f3c783e603d07d98d8f9b75d64c9ec))
+
+
+
 ## [0.2.11](https://github.com/varletjs/varlet-icon-builder/compare/v0.2.10...v0.2.11) (2024-05-19)
 
 
