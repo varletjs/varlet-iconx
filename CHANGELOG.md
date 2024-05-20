@@ -1,3 +1,12 @@
+## [0.2.14](https://github.com/varletjs/varlet-icon-builder/compare/v0.2.13...v0.2.14) (2024-05-20)
+
+
+### Features
+
+* support icons lib ([db6ad43](https://github.com/varletjs/varlet-icon-builder/commit/db6ad43551fba628f6cc88a10c09efc5d4134ac0))
+
+
+
 ## [0.2.13](https://github.com/varletjs/varlet-icon-builder/compare/v0.2.12...v0.2.13) (2024-05-20)
 
 

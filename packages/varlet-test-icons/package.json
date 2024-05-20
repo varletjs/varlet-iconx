@@ -1,8 +1,10 @@
 {
   "private": true,
   "name": "@varlet/test-icons",
-  "version": "0.2.13",
+  "version": "0.2.14",
   "type": "module",
   "license": "MIT",
-  "files": ["svg-icons"]
+  "files": [
+    "svg-icons"
+  ]
 }
