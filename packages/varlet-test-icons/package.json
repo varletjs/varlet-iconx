@@ -4,5 +4,5 @@
   "version": "0.2.13",
   "type": "module",
   "license": "MIT",
-  "fils": ["svg-icons"]
+  "files": ["svg-icons"]
 }
