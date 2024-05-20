@@ -42,35 +42,17 @@ export const unpluginFactory: UnpluginFactory<Options | undefined> = (options: O
   const generatedFileId = resolvePath(generatedFilename)
   const graph = new Map<string, string[]>()
   const tokens: string[] = []
-  const writeVirtualIconFileWithDebounce = debounce(writeVirtualIconFile, 200)
-  const initOnDemandWithDebounce = debounce(initOnDemand, 200)
 
+  initWatcher()
   initOnDemand()
   const wait = writeVirtualIconFile()
 
-  if (process.env.NODE_ENV === 'development') {
-    if (!libId) {
-      chokidar.watch(dirId, { ignoreInitial: true }).on('all', () => {
-        initOnDemandWithDebounce()
-        writeVirtualIconFileWithDebounce()
-      })
-    }
-
-    if (onDemand) {
-      const { include, exclude } = getOnDemandFilter()
-      chokidar.watch(include, { ignoreInitial: true, ignored: exclude }).on('all', (eventName, path) => {
-        const isSame = updateGraphNode(eventName, path)
-        if (isSame) {
-          return
-        }
-        // graph node is same after update, no need to update virtual icon file
-        writeVirtualIconFileWithDebounce()
-      })
-    }
-  }
-
   function getLibIdOrDirId() {
     return libId || dirId
+  }
+
+  function isSameGraphTokens(value: string[], target: string[]) {
+    return value.sort().join('/') === target.sort().join('/')
   }
 
   function getOnDemandFilter() {
@@ -100,13 +82,9 @@ export const unpluginFactory: UnpluginFactory<Options | undefined> = (options: O
     })
   }
 
-  function isSameValue(value: string[], target: string[]) {
-    return value.sort().join('/') === target.sort().join('/')
-  }
-
   function updateGraphNode(eventName: string, path: string) {
     path = resolvePath(path)
-    const value = graph.get(path) ?? []
+    const graphTokens = graph.get(path) ?? []
 
     if (eventName === 'add' || eventName === 'change') {
       const content = fse.readFileSync(path, 'utf-8')
@@ -122,12 +100,12 @@ export const unpluginFactory: UnpluginFactory<Options | undefined> = (options: O
         graph.delete(path)
       }
 
-      return isSameValue(value, existedTokens)
+      return isSameGraphTokens(graphTokens, existedTokens)
     }
 
     if (eventName === 'unlink') {
       graph.delete(path)
-      return isSameValue(value, [])
+      return isSameGraphTokens(graphTokens, [])
     }
   }
 
@@ -149,6 +127,33 @@ export const unpluginFactory: UnpluginFactory<Options | undefined> = (options: O
     })
 
     return uniq(tokens)
+  }
+
+  function initWatcher() {
+    if (process.env.NODE_ENV === 'development') {
+      const writeVirtualIconFileWithDebounce = debounce(writeVirtualIconFile, 200)
+      const initOnDemandWithDebounce = debounce(initOnDemand, 200)
+
+      if (!libId) {
+        // lib no need to watch, because it's a package in node_modules
+        chokidar.watch(dirId, { ignoreInitial: true }).on('all', () => {
+          initOnDemandWithDebounce()
+          writeVirtualIconFileWithDebounce()
+        })
+      }
+
+      if (onDemand) {
+        const { include, exclude } = getOnDemandFilter()
+        chokidar.watch(include, { ignoreInitial: true, ignored: exclude }).on('all', (eventName, path) => {
+          const isSame = updateGraphNode(eventName, path)
+          if (isSame) {
+            return
+          }
+          // graph node is same after update, no need to update virtual icon file
+          writeVirtualIconFileWithDebounce()
+        })
+      }
+    }
   }
 
   async function writeVirtualIconFile() {
