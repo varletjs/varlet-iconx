@@ -1,3 +1,12 @@
+## [0.2.15](https://github.com/varletjs/varlet-icon-builder/compare/v0.2.14...v0.2.15) (2024-05-21)
+
+
+### Features
+
+* support ttf generated, improve network trans performance ([1c59f16](https://github.com/varletjs/varlet-icon-builder/commit/1c59f16d69ce8db9ede614341bafb4befb542fdc))
+
+
+
 ## [0.2.14](https://github.com/varletjs/varlet-icon-builder/compare/v0.2.13...v0.2.14) (2024-05-20)
 
 
