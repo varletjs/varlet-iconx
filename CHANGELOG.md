@@ -1,3 +1,12 @@
+## [0.2.17](https://github.com/varletjs/varlet-icon-builder/compare/v0.2.16...v0.2.17) (2024-05-21)
+
+
+### Performance Improvements
+
+* improve dev perf ([51a3c23](https://github.com/varletjs/varlet-icon-builder/commit/51a3c23d05da57ae40a17ef1537f90e7b4a651ce))
+
+
+
 ## [0.2.16](https://github.com/varletjs/varlet-icon-builder/compare/v0.2.15...v0.2.16) (2024-05-21)
 
 
