@@ -130,6 +130,11 @@ export interface Options {
    */
   generatedFilename?: string
   /**
+   * @default `true`
+   * whether the font is inlined in the bundle via base64.
+   */
+  base64?: boolean
+  /**
    * icon font family class name, defaults same as `options.namespace`.
    */
   fontFamilyClassName?: string

@@ -1,6 +1,7 @@
 export interface Options {
   dir?: string
   lib?: string
+  base64?: boolean
   moduleId?: string
   generatedFilename?: string
   name?: string

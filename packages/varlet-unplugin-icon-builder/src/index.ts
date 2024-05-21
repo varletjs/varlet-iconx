@@ -27,6 +27,7 @@ export const unpluginFactory: UnpluginFactory<Options | undefined> = (options: O
     dir = './svg-icons',
     namespace = 'i',
     fontFamilyClassName,
+    base64 = true,
     onDemand = false,
   } = options
   const libId = lib ? resolveLib(lib) : ''
@@ -172,7 +173,7 @@ export const unpluginFactory: UnpluginFactory<Options | undefined> = (options: O
       }
 
       const { ttf, cssTemplate } = await buildIcons({
-        base64: false,
+        base64,
         emitFile: false,
         name,
         namespace,
@@ -193,7 +194,10 @@ export const unpluginFactory: UnpluginFactory<Options | undefined> = (options: O
       }
 
       fse.outputFileSync(generatedFileId, cssTemplate)
-      fse.outputFileSync(generatedFontId, ttf)
+
+      if (!base64) {
+        fse.outputFileSync(generatedFontId, ttf)
+      }
     } catch (e) {
       console.error(e)
     }
