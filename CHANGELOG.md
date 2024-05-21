@@ -1,3 +1,12 @@
+## [0.2.21](https://github.com/varletjs/varlet-icon-builder/compare/v0.2.20...v0.2.21) (2024-05-21)
+
+
+### Performance Improvements
+
+* improve regex perf ([d48a3d8](https://github.com/varletjs/varlet-icon-builder/commit/d48a3d8c7801f8ea18028e0b7e9b0f98de4285c1))
+
+
+
 ## [0.2.20](https://github.com/varletjs/varlet-icon-builder/compare/v0.2.19...v0.2.20) (2024-05-21)
 
 
