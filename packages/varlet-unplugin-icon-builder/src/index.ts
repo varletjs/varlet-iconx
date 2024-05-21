@@ -52,8 +52,8 @@ export const unpluginFactory: UnpluginFactory<Options | undefined> = (options: O
     return libId || dirId
   }
 
-  function isSameGraphTokens(value: string[], target: string[]) {
-    return value.sort().join('/') === target.sort().join('/')
+  function hasAddedToken(value: string[], newValue: string[]) {
+    return newValue.some((token) => !value.includes(token))
   }
 
   function getOnDemandFilter() {
@@ -101,12 +101,12 @@ export const unpluginFactory: UnpluginFactory<Options | undefined> = (options: O
         graph.delete(path)
       }
 
-      return isSameGraphTokens(graphTokens, existedTokens)
+      return hasAddedToken(graphTokens, existedTokens)
     }
 
     if (eventName === 'unlink') {
       graph.delete(path)
-      return isSameGraphTokens(graphTokens, [])
+      return hasAddedToken(graphTokens, [])
     }
   }
 
@@ -146,12 +146,11 @@ export const unpluginFactory: UnpluginFactory<Options | undefined> = (options: O
       if (onDemand) {
         const { include, exclude } = getOnDemandFilter()
         chokidar.watch(include, { ignoreInitial: true, ignored: exclude }).on('all', (eventName, path) => {
-          const isSame = updateGraphNode(eventName, path)
-          if (isSame) {
-            return
+          const hasAddedToken = updateGraphNode(eventName, path)
+          if (hasAddedToken) {
+            // improve performance, only build when has added token
+            writeVirtualIconFileWithDebounce()
           }
-          // graph node is same after update, no need to update virtual icon file
-          writeVirtualIconFileWithDebounce()
         })
       }
     }
