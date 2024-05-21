@@ -1,3 +1,12 @@
+## [0.2.19](https://github.com/varletjs/varlet-icon-builder/compare/v0.2.18...v0.2.19) (2024-05-21)
+
+
+### Features
+
+* support base64 option ([7144e71](https://github.com/varletjs/varlet-icon-builder/commit/7144e719909d74177646f7b23c30095e845a5615))
+
+
+
 ## [0.2.18](https://github.com/varletjs/varlet-icon-builder/compare/v0.2.17...v0.2.18) (2024-05-21)
 
 
