@@ -1,3 +1,12 @@
+## [0.2.16](https://github.com/varletjs/varlet-icon-builder/compare/v0.2.15...v0.2.16) (2024-05-21)
+
+
+### Bug Fixes
+
+* add timestamp to avoid cache ([36b54ee](https://github.com/varletjs/varlet-icon-builder/commit/36b54ee778214f27fa1a6df0e83a4a21f7cc32bd))
+
+
+
 ## [0.2.15](https://github.com/varletjs/varlet-icon-builder/compare/v0.2.14...v0.2.15) (2024-05-21)
 
 
