@@ -1,3 +1,12 @@
+## [0.2.20](https://github.com/varletjs/varlet-icon-builder/compare/v0.2.19...v0.2.20) (2024-05-21)
+
+
+### Performance Improvements
+
+* reduce debounce duration ([3fa4fee](https://github.com/varletjs/varlet-icon-builder/commit/3fa4feee62b1c457f932ee985785dab9bafc074a))
+
+
+
 ## [0.2.19](https://github.com/varletjs/varlet-icon-builder/compare/v0.2.18...v0.2.19) (2024-05-21)
 
 
