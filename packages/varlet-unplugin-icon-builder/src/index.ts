@@ -133,8 +133,8 @@ export const unpluginFactory: UnpluginFactory<Options | undefined> = (options: O
 
   function initWatcher() {
     if (process.env.NODE_ENV === 'development') {
-      const writeVirtualIconFileWithDebounce = debounce(writeVirtualIconFile, 200)
-      const initOnDemandWithDebounce = debounce(initOnDemand, 200)
+      const writeVirtualIconFileWithDebounce = debounce(writeVirtualIconFile, 20)
+      const initOnDemandWithDebounce = debounce(initOnDemand, 20)
 
       if (!libId) {
         // lib no need to watch, because it's a package in node_modules
