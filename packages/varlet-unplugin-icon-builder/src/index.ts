@@ -90,10 +90,8 @@ export const unpluginFactory: UnpluginFactory<Options | undefined> = (options: O
 
     if (eventName === 'add' || eventName === 'change') {
       const content = fse.readFileSync(path, 'utf-8')
-      const existedTokens = tokens.filter(
-        (token) =>
-          new RegExp(`(?<!-)\\b${token}\\b(?!-)`).test(content) ||
-          new RegExp(`(?<!-)\\b${namespace}-${token}\\b(?!-)`).test(content),
+      const existedTokens = tokens.filter((token) =>
+        new RegExp(`(?<!-)\\b(${token}|${namespace}-${token})\\b(?!-)`).test(content),
       )
 
       if (existedTokens.length > 0) {
