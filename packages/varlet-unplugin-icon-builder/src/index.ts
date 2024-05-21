@@ -176,7 +176,7 @@ export const unpluginFactory: UnpluginFactory<Options | undefined> = (options: O
         emitFile: false,
         name,
         namespace,
-        publicURL: `./${basename(generatedFontId)}`,
+        publicURL: `./${basename(generatedFontId)}?_t=${Date.now()}`,
         fontFamilyClassName: fontFamilyClassName ?? namespace,
         entry: libIdOrDirId,
         filenames: onDemand ? getFilenames() : undefined,
