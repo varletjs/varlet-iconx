@@ -2,5 +2,6 @@ node_modules
 dist
 icons
 virtual.icons.css
+virtual.icons.ttf
 svg-figma
 .DS_Store

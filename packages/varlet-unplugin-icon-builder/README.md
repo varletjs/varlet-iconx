@@ -126,7 +126,7 @@ export interface Options {
   moduleId?: string
   /**
    * @default `virtual.icons.css`
-   * font css file name generated based on svg.
+   * font css file name generated based on svg. it can also be a path, which must end with .css.
    */
   generatedFilename?: string
   /**

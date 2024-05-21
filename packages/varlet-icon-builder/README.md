@@ -116,6 +116,10 @@ export interface VIConfig {
    * icon font public path
    */
   publicPath?: string
+   /**
+   * icon font public url
+   */
+  publicURL?: string
   /**
    * icon filenames, e.g. ['window-close', 'cog']
    */

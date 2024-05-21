@@ -40,6 +40,7 @@ export const unpluginFactory: UnpluginFactory<Options | undefined> = (options: O
   }
 
   const generatedFileId = resolvePath(generatedFilename)
+  const generatedFontId = resolvePath(generatedFilename.replace('.css', '.ttf'))
   const graph = new Map<string, string[]>()
   const tokens: string[] = []
 
@@ -170,10 +171,12 @@ export const unpluginFactory: UnpluginFactory<Options | undefined> = (options: O
         return
       }
 
-      const { cssTemplate } = await buildIcons({
+      const { ttf, cssTemplate } = await buildIcons({
+        base64: false,
         emitFile: false,
         name,
         namespace,
+        publicURL: `./${basename(generatedFontId)}`,
         fontFamilyClassName: fontFamilyClassName ?? namespace,
         entry: libIdOrDirId,
         filenames: onDemand ? getFilenames() : undefined,
@@ -190,6 +193,7 @@ export const unpluginFactory: UnpluginFactory<Options | undefined> = (options: O
       }
 
       fse.outputFileSync(generatedFileId, cssTemplate)
+      fse.outputFileSync(generatedFontId, ttf)
     } catch (e) {
       console.error(e)
     }

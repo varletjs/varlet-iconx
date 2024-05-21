@@ -43,6 +43,7 @@ export async function buildIcons(viConfig: VIConfig) {
     fontStyle = 'normal',
     filenames,
     publicPath,
+    publicURL,
     emitFile = true,
   } = viConfig
 
@@ -77,7 +78,9 @@ ${iconNames.join(',\n')}
 @font-face {
   font-family: "${name}";
   src: url("${
-    base64 ? `data:font/truetype;charset=utf-8;base64,${ttf.toString('base64')}` : `${publicPath}${name}-webfont.ttf`
+    base64
+      ? `data:font/truetype;charset=utf-8;base64,${ttf.toString('base64')}`
+      : publicURL || `${publicPath}${name}-webfont.ttf`
   }") format("truetype");
   font-weight: ${fontWeight};
   font-style: ${fontStyle};
@@ -110,6 +113,7 @@ ${icons
   }
 
   return {
+    ttf,
     indexTemplate,
     cssTemplate,
   }
