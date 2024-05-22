@@ -1,3 +1,13 @@
+## [0.2.22](https://github.com/varletjs/varlet-icon-builder/compare/v0.2.21...v0.2.22) (2024-05-22)
+
+
+### Performance Improvements
+
+* improve perf by word split ([932d09b](https://github.com/varletjs/varlet-icon-builder/commit/932d09b50556ef3913111ca7d590b793a8afb9b2))
+* improve perf by workers ([aeb3bef](https://github.com/varletjs/varlet-icon-builder/commit/aeb3befc1d0692a399db5c14d6b68afb02c9b1f6))
+
+
+
 ## [0.2.21](https://github.com/varletjs/varlet-icon-builder/compare/v0.2.20...v0.2.21) (2024-05-21)
 
 
