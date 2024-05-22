@@ -4,6 +4,8 @@ import { createUnplugin } from 'unplugin'
 import { buildIcons } from '@varlet/icon-builder'
 import { isAbsolute, resolve, basename } from 'path'
 import { debounce, isPlainObject, uniq, slash } from '@varlet/shared'
+import { Worker } from 'worker_threads'
+import { cpus } from 'os'
 import glob from 'fast-glob'
 import fse from 'fs-extra'
 import chokidar from 'chokidar'
@@ -16,6 +18,19 @@ export function resolveLib(lib: string) {
   const path = resolvePath(`./node_modules/${lib}`)
 
   return fse.existsSync(path) ? path : ''
+}
+
+export function splitArrayIntoChunks(array: any[], numChunks: number) {
+  const chunks = []
+  const chunkSize = Math.ceil(array.length / numChunks)
+
+  for (let i = 0; i < numChunks; i++) {
+    const start = i * chunkSize
+    const end = start + chunkSize
+    chunks.push(array.slice(start, end))
+  }
+
+  return chunks
 }
 
 export const unpluginFactory: UnpluginFactory<Options | undefined> = (options: Options = {}) => {
@@ -44,10 +59,12 @@ export const unpluginFactory: UnpluginFactory<Options | undefined> = (options: O
   const generatedFontId = resolvePath(generatedFilename.replace('.css', '.ttf'))
   const graph = new Map<string, string[]>()
   const tokens: string[] = []
+  let waitWorkers: Promise<any> = Promise.resolve()
+  const waitWrite: Promise<any> = Promise.resolve()
 
   initWatcher()
   initOnDemand()
-  const wait = writeVirtualIconFile()
+  writeVirtualIconFile()
 
   function getLibIdOrDirId() {
     return libId || dirId
@@ -72,16 +89,39 @@ export const unpluginFactory: UnpluginFactory<Options | undefined> = (options: O
   function initOnDemand() {
     if (onDemand) {
       updateTokens()
-      updateGraph()
+      updateGraphByWorkers()
     }
   }
 
-  function updateGraph() {
+  function updateGraphByWorkers() {
     graph.clear()
     const { include, exclude } = getOnDemandFilter()
-    glob.sync(include, { ignore: exclude }).forEach((path) => {
-      updateGraphNode('add', path)
-    })
+    const numThreads = cpus().length + 1
+    const paths = glob.sync(include, { ignore: exclude })
+    const chunks = splitArrayIntoChunks(paths, numThreads)
+
+    const workers = chunks
+      .filter((chunk) => chunk.length)
+      .map((chunk) => new Worker(resolve(__dirname, './worker.js'), {
+          workerData: {
+            paths: chunk,
+            tokens,
+            namespace,
+          },
+        }))
+
+    waitWorkers = Promise.all(
+      workers.map((worker) => new Promise((resolve) => {
+          worker.on('message', (result: Array<{ path: string; existedTokens: string[] }>) => {
+            result.forEach(({ path, existedTokens }) => {
+              graph.set(path, existedTokens)
+              resolve(1)
+            })
+          })
+        })),
+    )
+
+    return waitWorkers
   }
 
   function updateGraphNode(eventName: string, path: string) {
@@ -157,6 +197,7 @@ export const unpluginFactory: UnpluginFactory<Options | undefined> = (options: O
   }
 
   async function writeVirtualIconFile() {
+    await waitWorkers
     try {
       const libIdOrDirId = getLibIdOrDirId()
 
@@ -206,7 +247,7 @@ export const unpluginFactory: UnpluginFactory<Options | undefined> = (options: O
     enforce: 'pre',
 
     async buildStart() {
-      await wait
+      await Promise.all([waitWorkers, waitWrite])
     },
 
     async resolveId(id) {
