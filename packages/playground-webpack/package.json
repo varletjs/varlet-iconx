@@ -1,6 +1,6 @@
 {
   "private": true,
-  "version": "0.2.22",
+  "version": "0.2.23",
   "scripts": {
     "dev": "vue-cli-service serve",
     "build": "vue-cli-service build"
