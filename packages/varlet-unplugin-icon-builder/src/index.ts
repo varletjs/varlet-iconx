@@ -43,7 +43,7 @@ export const unpluginFactory: UnpluginFactory<Options | undefined> = (options: O
   const generatedFileId = resolvePath(generatedFilename)
   const generatedFontId = resolvePath(generatedFilename.replace('.css', '.ttf'))
   const graph = new Map<string, string[]>()
-  const tokens: string[] = []
+  let tokens = new Set<string>()
 
   initWatcher()
   initOnDemand()
@@ -84,15 +84,25 @@ export const unpluginFactory: UnpluginFactory<Options | undefined> = (options: O
     })
   }
 
+  function normalizeToken(token: string) {
+    return token.startsWith(`${namespace}-`) ? token.replace(`${namespace}-`, '') : token
+  }
+
   function updateGraphNode(eventName: string, path: string) {
     path = resolvePath(path)
     const graphTokens = graph.get(path) ?? []
 
     if (eventName === 'add' || eventName === 'change') {
       const content = fse.readFileSync(path, 'utf-8')
-      const existedTokens = tokens.filter((token) =>
-        new RegExp(`(?<!-)\\b(${token}|${namespace}-${token})\\b(?!-)`).test(content),
-      )
+      const words = content.match(/\b[\w-]+\b/g) ?? []
+      const existedTokens: string[] = []
+
+      words.forEach((word) => {
+        const token = normalizeToken(word)
+        if (tokens.has(token)) {
+          existedTokens.push(token)
+        }
+      })
 
       if (existedTokens.length > 0) {
         graph.set(path, existedTokens)
@@ -110,9 +120,9 @@ export const unpluginFactory: UnpluginFactory<Options | undefined> = (options: O
   }
 
   function updateTokens() {
-    tokens.length = 0
+    tokens.clear()
     const svgTokens = getSvgTokens()
-    tokens.push(...svgTokens)
+    tokens = new Set(svgTokens)
   }
 
   function getSvgTokens() {
@@ -206,7 +216,10 @@ export const unpluginFactory: UnpluginFactory<Options | undefined> = (options: O
     enforce: 'pre',
 
     async buildStart() {
-      await wait
+      if (process.env.NODE_ENV !== 'development') {
+        // in development, for service startup speed, no need to wait
+        await wait
+      }
     },
 
     async resolveId(id) {
