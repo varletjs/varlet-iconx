@@ -37,7 +37,7 @@
   },
   "dependencies": {
     "commander": "^11.1.0",
-    "@varlet/webfont": "0.0.8-alpha.1716411197094",
+    "@varlet/webfont": "0.0.8",
     "chokidar": "3.6.0",
     "fs-extra": "^11.1.1",
     "picocolors": "^1.0.0",
