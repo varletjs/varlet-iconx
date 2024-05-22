@@ -20,9 +20,7 @@ function clearOutputs(fontsDir: string, cssDir: string) {
 }
 
 function buildWebFont(name: string, entry: string, filenames?: string[]) {
-  const files = filenames
-    ? filenames.map((filename) => `${slash(entry)}/**/${filename}.svg`)
-    : `${slash(entry)}/**/*.svg`
+  const files = filenames ? filenames.map((filename) => `${slash(entry)}/${filename}.svg`) : `${slash(entry)}/**/*.svg`
 
   return webfont.default({
     files,
