@@ -1,6 +1,6 @@
 import fse from 'fs-extra'
 import chokidar from 'chokidar'
-import webfont from 'webfont'
+import { webfont } from '@varlet/webfont'
 import logger from './logger.js'
 import { resolvePath, slash } from './utils.js'
 import { resolve } from 'path'
@@ -20,9 +20,9 @@ function clearOutputs(fontsDir: string, cssDir: string) {
 }
 
 function buildWebFont(name: string, entry: string, filenames?: string[]) {
-  const files = filenames ? filenames.map((filename) => `${slash(entry)}/${filename}.svg`) : `${slash(entry)}/**/*.svg`
+  const files = filenames ? filenames.map((filename) => `${slash(entry)}/${filename}.svg`) : `${slash(entry)}/*.svg`
 
-  return webfont.default({
+  return webfont({
     files,
     fontName: name,
     formats: ['ttf'],
@@ -55,7 +55,7 @@ export async function buildIcons(viConfig: VIConfig) {
 
   const { ttf, glyphsData } = await buildWebFont(name, io.entry, filenames)
 
-  const icons: { name: string; pointCode: string }[] = glyphsData.map((i: any) => ({
+  const icons: { name: string; pointCode: string }[] = (glyphsData ?? []).map((i: any) => ({
     name: i.metadata.name,
     pointCode: i.metadata.unicode[0].charCodeAt(0).toString(16),
   }))
@@ -77,7 +77,7 @@ ${iconNames.join(',\n')}
   font-family: "${name}";
   src: url("${
     base64
-      ? `data:font/truetype;charset=utf-8;base64,${ttf.toString('base64')}`
+      ? `data:font/truetype;charset=utf-8;base64,${ttf!.toString('base64')}`
       : publicURL || `${publicPath}${name}-webfont.ttf`
   }") format("truetype");
   font-weight: ${fontWeight};
@@ -100,7 +100,7 @@ ${icons
 
   if (emitFile) {
     await Promise.all([
-      writeFile(resolve(fontsDir, `${name}-webfont.ttf`), ttf),
+      writeFile(resolve(fontsDir, `${name}-webfont.ttf`), ttf!),
       writeFile(resolve(cssDir, `${name}.css`), cssTemplate),
       writeFile(resolve(cssDir, `${name}.less`), cssTemplate),
       writeFile(resolve(cssDir, `${name}.scss`), cssTemplate),
