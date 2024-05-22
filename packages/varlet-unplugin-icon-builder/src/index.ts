@@ -204,7 +204,7 @@ export const unpluginFactory: UnpluginFactory<Options | undefined> = (options: O
       fse.outputFileSync(generatedFileId, cssTemplate)
 
       if (!base64) {
-        fse.outputFileSync(generatedFontId, ttf)
+        fse.outputFileSync(generatedFontId, ttf!)
       }
     } catch (e) {
       console.error(e)
