@@ -1,3 +1,12 @@
+## [0.2.24](https://github.com/varletjs/varlet-icon-builder/compare/v0.2.23...v0.2.24) (2024-05-22)
+
+
+### Features
+
+* replace webfont with varlet-webfont ([c33b0ba](https://github.com/varletjs/varlet-icon-builder/commit/c33b0bab24c50e465f782c80c3c8957487b29244))
+
+
+
 ## [0.2.23](https://github.com/varletjs/varlet-icon-builder/compare/v0.2.22...v0.2.23) (2024-05-22)
 
 
