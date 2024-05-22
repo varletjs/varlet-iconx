@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "@varlet/test-icons",
-  "version": "0.2.24",
+  "version": "0.2.25",
   "type": "module",
   "license": "MIT",
   "files": [

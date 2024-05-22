@@ -1,3 +1,7 @@
+## [0.2.25](https://github.com/varletjs/varlet-icon-builder/compare/v0.2.24...v0.2.25) (2024-05-22)
+
+
+
 ## [0.2.24](https://github.com/varletjs/varlet-icon-builder/compare/v0.2.23...v0.2.24) (2024-05-22)
 
 

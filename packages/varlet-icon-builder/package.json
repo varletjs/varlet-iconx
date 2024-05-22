@@ -1,7 +1,7 @@
 {
   "name": "@varlet/icon-builder",
   "type": "module",
-  "version": "0.2.24",
+  "version": "0.2.25",
   "description": "icon builder of varlet",
   "keywords": [
     "varlet",
