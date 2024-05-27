@@ -97,8 +97,8 @@ importers:
         specifier: ^3.2.9
         version: 3.2.9
       '@varlet/webfont':
-        specifier: 0.0.8
-        version: 0.0.8
+        specifier: 0.0.9
+        version: 0.0.9
       chokidar:
         specifier: 3.6.0
         version: 3.6.0
@@ -2647,8 +2647,8 @@ packages:
     resolution: {integrity: sha512-m7LLDca7HMGkFI9NLRrYn8DBQxU7hFp7FzXmNuSbqaUeG9ZuqHitXzo3wPEqQ2wMEJkwFTRs4wniu2o+ofLTtw==}
     dev: false
 
-  /@varlet/webfont@0.0.8:
-    resolution: {integrity: sha512-86+UFMtXmzp08b1HJ5fag0ONXlVPXB7dtAQaAW1LhA+DU3TcvqD7As9IP+VANo4FK5wG20gf6+kCwl0Ticj+7A==}
+  /@varlet/webfont@0.0.9:
+    resolution: {integrity: sha512-CIDVrfyzKC20D/ig4lQKXGcKwRlvtgzi/Hzb7YkOBMx4EwwHlGcRRAVBzzDNkFBFtSNUa+IwScvLim8UlcoipQ==}
     dependencies:
       '@varlet/shared': 3.2.10
       fs-extra: 11.2.0
