@@ -32,12 +32,17 @@ export const unpluginFactory: UnpluginFactory<Options | undefined> = (options: O
   } = options
   const libId = lib ? resolveLib(lib) : ''
   if (lib && !libId) {
-    console.warn(`cannot resolve lib, fallback to dir ${dir}`)
+    console.warn(`[varlet/iconx]: Cannot resolve lib, fallback to dir ${dir}`)
   }
 
   const dirId = resolvePath(dir)
   if (!libId && !fse.existsSync(dirId)) {
-    throw new Error(`cannot resolve dir, please check ${dirId}`)
+    console.warn(`[varlet/iconx]: Cannot resolve dir, please check ${dirId}`)
+
+    return {
+      name: 'varlet-unplugin-icon-builder',
+      enforce: 'pre',
+    }
   }
 
   const generatedFileId = resolvePath(generatedFilename)
