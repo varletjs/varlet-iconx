@@ -37,7 +37,9 @@ export const unpluginFactory: UnpluginFactory<Options | undefined> = (options: O
 
   const dirId = resolvePath(dir)
   if (!libId && !fse.existsSync(dirId)) {
-    console.warn(`[varlet/iconx]: Cannot resolve dir, please check ${dirId}`)
+    console.warn(
+      `[varlet/iconx]: Cannot resolve dir, please check ${dirId}. Please make sure to restart your service after the addition is completed`,
+    )
 
     return {
       name: 'varlet-unplugin-icon-builder',
