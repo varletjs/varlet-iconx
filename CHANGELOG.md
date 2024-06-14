@@ -1,3 +1,13 @@
+## [0.2.28](https://github.com/varletjs/varlet-icon-builder/compare/v0.2.27...v0.2.28) (2024-06-14)
+
+
+### Bug Fixes
+
+* replace error report with warning ([cc80521](https://github.com/varletjs/varlet-icon-builder/commit/cc80521be7243582b7eae908c0c1dd7eb3e2d7f3))
+* warning improve ([3d62b26](https://github.com/varletjs/varlet-icon-builder/commit/3d62b26d4db8e7e0b845ac968de1ddfe62658f9a))
+
+
+
 ## [0.2.27](https://github.com/varletjs/varlet-icon-builder/compare/v0.2.26...v0.2.27) (2024-05-27)
 
 
