@@ -42,18 +42,22 @@
     "fs-extra": "^11.1.1",
     "picocolors": "^1.0.0",
     "unconfig": "0.3.13",
+    "@vue/compiler-sfc": "^3.4.29",
+    "typescript": "^5.2.2",
+    "esbuild": "0.21.5",
+    "hash-sum": "^2.0.0",
     "@varlet/axle": "^0.7.1",
-    "@varlet/shared": "^3.2.9"
+    "@varlet/shared": "^3.3.0"
   },
   "devDependencies": {
     "@types/fs-extra": "^11.0.4",
     "@types/node": "^20.9.0",
+    "@types/hash-sum": "^1.0.2",
     "@varlet/eslint-config": "^3.1.4",
     "@varlet/release": "0.2.5",
     "eslint": "^8.53.0",
     "prettier": "^3.1.0",
     "simple-git-hooks": "^2.9.0",
-    "tsup": "^8.0.1",
-    "typescript": "^5.2.2"
+    "tsup": "^8.0.1"
   }
 }

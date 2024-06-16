@@ -4,4 +4,8 @@ icons
 virtual.icons.css
 virtual.icons.ttf
 svg-figma
+svg-esm
+svg-cjs
+svg-components
+svg-types
 .DS_Store

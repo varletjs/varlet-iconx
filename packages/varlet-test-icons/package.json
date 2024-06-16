@@ -6,5 +6,11 @@
   "license": "MIT",
   "files": [
     "svg-icons"
-  ]
+  ],
+  "scripts": {
+    "build": "vi generate -e ./svg-icons"
+  },
+  "devDependencies": {
+    "@varlet/icon-builder": "workspace:*"
+  }
 }

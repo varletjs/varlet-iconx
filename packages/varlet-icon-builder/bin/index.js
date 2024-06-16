@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { build, figma } from '../dist/index.js'
+import { build, generate, figma } from '../dist/index.js'
 import { Command } from 'commander'
 
 const program = new Command()
@@ -7,8 +7,18 @@ const program = new Command()
 program
   .command('build')
   .option('-w --watch', 'Watch icons for changes and rebuild')
-  .description('Build icons')
+  .description('Build icon fonts from svg files')
   .action(build)
+
+program
+  .command('generate')
+  .option('-e --entry <entry>', 'Svg files directory')
+  .option('--outputComponents <outputComponents>', 'Output svg component directory')
+  .option('--outputTypes <outputTypes>', 'Output types directory')
+  .option('--outputEsm <outputEsm>', 'Output esm directory')
+  .option('--outputCjs <outputCjs>', 'Output cjs directory')
+  .description('Generate icon components from svg files')
+  .action(generate)
 
 program
   .command('figma')

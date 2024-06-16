@@ -92,6 +92,16 @@ export interface VIConfig {
      */
     output?: string
   }
+
+  generate?: {
+    entry?: string
+    output?: {
+      component?: string
+      types?: string
+      esm?: string
+      cjs?: string
+    }
+  }
 }
 
 export function defineConfig(config: VIConfig) {

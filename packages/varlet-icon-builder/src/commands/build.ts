@@ -1,10 +1,11 @@
 import fse from 'fs-extra'
 import chokidar from 'chokidar'
+import logger from '../utils/logger.js'
 import { webfont } from '@varlet/webfont'
-import logger from './logger.js'
-import { resolvePath, slash } from './utils.js'
+import { resolvePath } from '../utils/shared.js'
+import { slash } from '@varlet/shared'
 import { resolve } from 'path'
-import { VIConfig, getViConfig } from './config.js'
+import { VIConfig, getViConfig } from '../utils/config.js'
 
 export interface BuildCommandOptions {
   watch?: boolean
