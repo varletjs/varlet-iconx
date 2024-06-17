@@ -1,3 +1,17 @@
+# [0.3.0](https://github.com/varletjs/varlet-icon-builder/compare/v0.2.28...v0.3.0) (2024-06-17)
+
+
+### Bug Fixes
+
+* **generate:** fix svg fill and stroke re ([ac902c6](https://github.com/varletjs/varlet-icon-builder/commit/ac902c69b45cee013c63868190bea55d984a6261))
+
+
+### Features
+
+* support generate command ([565ad0d](https://github.com/varletjs/varlet-icon-builder/commit/565ad0d1ad1aab96fc0510e4f92fbaa5da3fd456))
+
+
+
 ## [0.2.28](https://github.com/varletjs/varlet-icon-builder/compare/v0.2.27...v0.2.28) (2024-06-14)
 
 
