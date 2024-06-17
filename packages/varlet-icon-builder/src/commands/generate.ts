@@ -16,8 +16,6 @@ export interface GenerateCommandOptions {
   }
 }
 
-const FILL_RE = /fill=".+?"/g
-const STROKE_RE = /stroke=".+?"/g
 const INDEX_FILE = 'index.ts'
 const INDEX_D_FILE = 'index.d.ts'
 
@@ -68,9 +66,9 @@ export async function generateModule(entry: string, output: string, format: 'cjs
           format,
         })
         .then(({ code }) => ({
-            code,
-            filename: filename.replace('.ts', outputExtname).replace('.vue', outputExtname),
-          }))
+          code,
+          filename: filename.replace('.ts', outputExtname).replace('.vue', outputExtname),
+        }))
     }),
   )
 
@@ -128,11 +126,13 @@ export function generateIndexFile(dir: string) {
 }
 
 export function injectSvgCurrentColor(content: string) {
-  if (!content.match(FILL_RE) && !content.match(STROKE_RE)) {
+  if (!content.match(/fill=".+?"/g) && !content.match(/stroke=".+?"/g)) {
     return content.replace('<svg', '<svg fill="currentColor"')
   }
 
-  return content.replace(FILL_RE, 'fill="currentColor"').replace(STROKE_RE, 'stroke="currentColor"')
+  return content
+    .replace(/fill="(?!none).+?"/g, 'fill="currentColor"')
+    .replace(/stroke="(?!none).+?"/g, 'stroke="currentColor"')
 }
 
 export function compileSvgToVueSfc(name: string, content: string) {
