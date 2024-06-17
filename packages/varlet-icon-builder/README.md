@@ -37,6 +37,14 @@ npx vi build
 npx vi build -w
 ```
 
+#### generate
+
+Generate components from svg, support esm, cjs, sfc, types.
+
+```shell
+npx vi generate
+```
+
 #### figma
 
 Pull the svg icon in the figma document to the local.
@@ -59,7 +67,8 @@ export default defineConfig({
   fontFamilyClassName: 'i--set',
   entry: './svg-icons',
   output: './icons',
-  figma: {}
+  figma: {},
+  generate: {}
 })
 ```
 
@@ -124,6 +133,38 @@ export interface VIConfig {
    * icon filenames, e.g. ['window-close', 'cog']
    */
   filenames?: string[]
+  /**
+   * generate command related options
+   */ 
+  generate?: {
+    /**
+     * @default `./svg`
+     * svg icons folder path
+     */
+    entry?: string
+    output?: {
+      /**
+       * @default `./svg-components`
+       * component output path
+       */
+      component?: string
+      /**
+       * @default `./svg-types`
+       * ts declaration output path
+       */
+      types?: string
+      /**
+       * @default `./svg-esm`
+       * es module format output path
+       */
+      esm?: string
+      /**
+       * @default `./svg-cjs`
+       * commonjs module format output path
+       */
+      cjs?: string
+    }
+  }
   /**
    * figma parsing options
    */
