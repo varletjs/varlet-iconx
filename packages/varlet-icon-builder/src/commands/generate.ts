@@ -57,7 +57,11 @@ export async function generateModule(entry: string, output: string, format: 'cjs
   const manifest = await Promise.all(
     filenames.map((filename) => {
       const file = resolve(process.cwd(), entry, filename)
-      const content = filename.endsWith('.vue') ? compileSFC(file) : fse.readFileSync(file)
+      let content = filename.endsWith('.vue') ? compileSFC(file) : fse.readFileSync(file, 'utf-8')
+
+      if (filename === INDEX_FILE) {
+        content = content.replace(/\.vue/g, outputExtname)
+      }
 
       return esbuild
         .transform(content, {
