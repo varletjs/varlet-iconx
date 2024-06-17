@@ -1,3 +1,12 @@
+## [0.3.1](https://github.com/varletjs/varlet-icon-builder/compare/v0.3.0...v0.3.1) (2024-06-17)
+
+
+### Bug Fixes
+
+* config maybe undefined ([6ca99bc](https://github.com/varletjs/varlet-icon-builder/commit/6ca99bc750b5cdfc448a5442f3e6eee9815afe3e))
+
+
+
 # [0.3.0](https://github.com/varletjs/varlet-icon-builder/compare/v0.2.28...v0.3.0) (2024-06-17)
 
 
