@@ -8,7 +8,7 @@
     "svg-icons"
   ],
   "scripts": {
-    "generate": "vi generate -e ./svg-icons"
+    "generate": "vi generate"
   },
   "devDependencies": {
     "@varlet/icon-builder": "workspace:*"
