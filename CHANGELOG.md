@@ -1,3 +1,12 @@
+## [0.3.2](https://github.com/varletjs/varlet-icon-builder/compare/v0.3.1...v0.3.2) (2024-06-17)
+
+
+### Bug Fixes
+
+* fix module extname error ([b611f90](https://github.com/varletjs/varlet-icon-builder/commit/b611f90f88ecbd3b954dbac496f26e7838ef2540))
+
+
+
 ## [0.3.1](https://github.com/varletjs/varlet-icon-builder/compare/v0.3.0...v0.3.1) (2024-06-17)
 
 
