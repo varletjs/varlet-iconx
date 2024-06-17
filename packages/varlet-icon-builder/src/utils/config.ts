@@ -117,5 +117,5 @@ export async function getViConfig(): Promise<VIConfig> {
     ],
   })
 
-  return config
+  return config ?? {}
 }
