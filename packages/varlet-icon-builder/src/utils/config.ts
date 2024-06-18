@@ -1,8 +1,8 @@
 import { loadConfig } from 'unconfig'
 
 export enum GenerateFramework {
-  Vue3 = 'Vue3',
-  React = 'React',
+  vue3 = 'vue3',
+  react = 'react',
 }
 
 export interface VIConfig {

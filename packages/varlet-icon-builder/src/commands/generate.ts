@@ -26,7 +26,7 @@ export async function generate(options: GenerateCommandOptions = {}) {
   const config = (await getViConfig()) ?? {}
   const entry = options.entry ?? config?.generate?.entry ?? './svg'
   const wrapperComponentName = options.wrapperComponentName ?? config?.generate?.wrapperComponentName ?? 'XIcon'
-  const framework = options.entry ?? config?.generate?.framework ?? GenerateFramework.Vue3
+  const framework = options.entry ?? config?.generate?.framework ?? GenerateFramework.vue3
   const componentsDir = resolve(
     process.cwd(),
     options.output?.components ?? config.generate?.output?.component ?? './svg-components',
@@ -35,9 +35,9 @@ export async function generate(options: GenerateCommandOptions = {}) {
   const cjsDir = resolve(process.cwd(), options.output?.cjs ?? config.generate?.output?.cjs ?? './svg-cjs')
   const typesDir = resolve(process.cwd(), options.output?.types ?? config.generate?.output?.types ?? './svg-types')
 
-  if (framework === GenerateFramework.Vue3) {
+  if (framework === GenerateFramework.vue3) {
     generateVueSfc(entry, componentsDir, wrapperComponentName)
-  } else if (framework === GenerateFramework.React) {
+  } else if (framework === GenerateFramework.react) {
     generateReactTsx(entry, componentsDir)
   }
   generateIndexFile(componentsDir)
@@ -224,7 +224,7 @@ export function injectSvgStyle(content: string) {
 export function compileSvgToReactTsx(name: string, content: string) {
   content = injectSvgCurrentColor(content.match(/<svg (.|\n|\r)*/)?.[0] ?? '')
   return `
-import * as React from 'react';
+import React from 'react';
 
 const ${bigCamelize(name)}: React.FC = () => (
   ${content}
