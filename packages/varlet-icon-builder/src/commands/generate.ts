@@ -1,4 +1,4 @@
-import { getViConfig } from '../utils/config.js'
+import { getViConfig, GenerateFramework } from '../utils/config.js'
 import { resolve } from 'path'
 import { bigCamelize } from '@varlet/shared'
 import { compileSFC } from '../utils/compiler.js'
@@ -10,6 +10,7 @@ import logger from '../utils/logger.js'
 export interface GenerateCommandOptions {
   entry?: string
   wrapperComponentName?: string
+  framework?: GenerateFramework
   output?: {
     components?: string
     types?: string
@@ -25,6 +26,7 @@ export async function generate(options: GenerateCommandOptions = {}) {
   const config = (await getViConfig()) ?? {}
   const entry = options.entry ?? config?.generate?.entry ?? './svg'
   const wrapperComponentName = options.wrapperComponentName ?? config?.generate?.wrapperComponentName ?? 'XIcon'
+  const framework = options.entry ?? config?.generate?.framework ?? GenerateFramework.Vue3
   const componentsDir = resolve(
     process.cwd(),
     options.output?.components ?? config.generate?.output?.component ?? './svg-components',
@@ -33,7 +35,11 @@ export async function generate(options: GenerateCommandOptions = {}) {
   const cjsDir = resolve(process.cwd(), options.output?.cjs ?? config.generate?.output?.cjs ?? './svg-cjs')
   const typesDir = resolve(process.cwd(), options.output?.types ?? config.generate?.output?.types ?? './svg-types')
 
-  generateVueSfc(entry, componentsDir, wrapperComponentName)
+  if (framework === GenerateFramework.Vue3) {
+    generateVueSfc(entry, componentsDir, wrapperComponentName)
+  } else if (framework === GenerateFramework.React) {
+    generateReactTsx(entry, componentsDir)
+  }
   generateIndexFile(componentsDir)
   await Promise.all([
     generateModule(componentsDir, esmDir, 'esm'),
@@ -82,6 +88,19 @@ export async function generateModule(entry: string, output: string, format: 'cjs
 
   manifest.forEach(({ code, filename }) => {
     fse.outputFileSync(resolve(output, filename), code)
+  })
+}
+
+export function generateReactTsx(entry: string, output: string) {
+  fse.removeSync(output)
+
+  const filenames = fse.readdirSync(entry)
+  filenames.forEach((filename) => {
+    const file = resolve(process.cwd(), entry, filename)
+    const content = fse.readFileSync(file, 'utf-8')
+    const tsxContent = compileSvgToReactTsx(filename.replace('.svg', ''), content)
+
+    fse.outputFileSync(resolve(output, bigCamelize(filename.replace('.svg', '.tsx'))), tsxContent)
   })
 }
 
@@ -200,6 +219,19 @@ export function injectSvgCurrentColor(content: string) {
 
 export function injectSvgStyle(content: string) {
   return content.replace('<svg', '<svg style="width: var(--x-icon-size); height: var(--x-icon-size)"')
+}
+
+export function compileSvgToReactTsx(name: string, content: string) {
+  content = injectSvgCurrentColor(content.match(/<svg (.|\n|\r)*/)?.[0] ?? '')
+  return `
+import * as React from 'react';
+
+const ${bigCamelize(name)}: React.FC = () => (
+  ${content}
+);
+
+export default ${bigCamelize(name)};
+`
 }
 
 export function compileSvgToVueSfc(name: string, content: string) {
