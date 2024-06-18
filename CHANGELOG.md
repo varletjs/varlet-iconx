@@ -1,3 +1,12 @@
+## [0.3.4](https://github.com/varletjs/varlet-icon-builder/compare/v0.3.3...v0.3.4) (2024-06-18)
+
+
+### Bug Fixes
+
+* fix wrapper component props ([06b543b](https://github.com/varletjs/varlet-icon-builder/commit/06b543b8d4ae4939d8789e4fd086d0e37f0c1789))
+
+
+
 ## [0.3.3](https://github.com/varletjs/varlet-icon-builder/compare/v0.3.2...v0.3.3) (2024-06-18)
 
 
