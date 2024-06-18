@@ -1,3 +1,12 @@
+## [0.3.5](https://github.com/varletjs/varlet-icon-builder/compare/v0.3.4...v0.3.5) (2024-06-18)
+
+
+### Bug Fixes
+
+* fix svg wrapper component display ([4d53d96](https://github.com/varletjs/varlet-icon-builder/commit/4d53d9603110b4c38290f4843bc789e2e49f1b6c))
+
+
+
 ## [0.3.4](https://github.com/varletjs/varlet-icon-builder/compare/v0.3.3...v0.3.4) (2024-06-18)
 
 
