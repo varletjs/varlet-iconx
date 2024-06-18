@@ -108,7 +108,7 @@ ${icons
       writeFile(resolve(io.output, 'index.js'), indexTemplate),
     ])
 
-    logger.success('build icons success!')
+    logger.success('build icons success')
   }
 
   return {

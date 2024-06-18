@@ -95,6 +95,7 @@ export interface VIConfig {
 
   generate?: {
     entry?: string
+    wrapperComponentName?: string
     output?: {
       component?: string
       types?: string

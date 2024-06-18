@@ -5,9 +5,11 @@ import { compileSFC } from '../utils/compiler.js'
 import { removeExtname } from '../utils/shared.js'
 import esbuild from 'esbuild'
 import fse from 'fs-extra'
+import logger from '../utils/logger.js'
 
 export interface GenerateCommandOptions {
   entry?: string
+  wrapperComponentName?: string
   output?: {
     components?: string
     types?: string
@@ -22,6 +24,7 @@ const INDEX_D_FILE = 'index.d.ts'
 export async function generate(options: GenerateCommandOptions = {}) {
   const config = (await getViConfig()) ?? {}
   const entry = options.entry ?? config?.generate?.entry ?? './svg'
+  const wrapperComponentName = options.wrapperComponentName ?? config?.generate?.wrapperComponentName ?? 'XIcon'
   const componentsDir = resolve(
     process.cwd(),
     options.output?.components ?? config.generate?.output?.component ?? './svg-components',
@@ -30,13 +33,14 @@ export async function generate(options: GenerateCommandOptions = {}) {
   const cjsDir = resolve(process.cwd(), options.output?.cjs ?? config.generate?.output?.cjs ?? './svg-cjs')
   const typesDir = resolve(process.cwd(), options.output?.types ?? config.generate?.output?.types ?? './svg-types')
 
-  generateVueSfc(entry, componentsDir)
+  generateVueSfc(entry, componentsDir, wrapperComponentName)
   generateIndexFile(componentsDir)
   await Promise.all([
     generateModule(componentsDir, esmDir, 'esm'),
     generateModule(componentsDir, cjsDir, 'cjs'),
-    generateTypes(componentsDir, typesDir),
+    generateTypes(componentsDir, typesDir, wrapperComponentName),
   ])
+  logger.success('generate icons success')
 }
 
 export function getOutputExtname(format: 'cjs' | 'esm') {
@@ -81,7 +85,7 @@ export async function generateModule(entry: string, output: string, format: 'cjs
   })
 }
 
-export function generateVueSfc(entry: string, output: string) {
+export function generateVueSfc(entry: string, output: string, wrapperComponentName: string) {
   fse.removeSync(output)
 
   const filenames = fse.readdirSync(entry)
@@ -92,20 +96,76 @@ export function generateVueSfc(entry: string, output: string) {
 
     fse.outputFileSync(resolve(output, bigCamelize(filename.replace('.svg', '.vue'))), sfcContent)
   })
+
+  fse.outputFileSync(
+    resolve(output, 'XIcon.vue'),
+    `\
+<template>
+  <i :style="style">
+    <slot />
+  </i>
+</template>
+
+<script lang="ts">
+import { defineComponent, computed } from 'vue'
+
+export default defineComponent({
+  name: '${wrapperComponentName}',
+  props: {
+    size: {
+      type: [String, Number],
+      default: '1em',
+    },
+    color: {
+      type: String,
+      default: 'currentColor',
+    }
+  },
+  setup(props) {
+    const style = computed(() => ({
+      display: 'inline-block',
+      width: typeof props.size === 'number' ? \`\${props.size}px\` : props.size,
+      height: typeof props.size === 'number' ? \`\${props.size}px\` : props.size,
+      color: props.color,
+    }))
+
+    return {
+      style
+    }
+  }
+})
+</script>`,
+  )
 }
 
-export function generateTypes(entry: string, output: string) {
+export function generateTypes(entry: string, output: string, wrapperComponentName: string) {
   fse.removeSync(output)
   const filenames = fse.readdirSync(entry).filter((filename) => filename !== INDEX_FILE)
   filenames.forEach((filename) => {
-    const content = `\
+    if (filename === `${wrapperComponentName}.vue`) {
+      fse.outputFileSync(
+        resolve(output, `${wrapperComponentName}.d.ts`),
+        `\
+export default class ${wrapperComponentName} {
+  static name: string
+    
+  $props: {
+    size: string | number
+    color: string
+  }
+}`,
+      )
+    } else {
+      fse.outputFileSync(
+        resolve(output, `${removeExtname(filename)}.d.ts`),
+        `\
 export default class ${removeExtname(filename)} {
   static name: string
 
   $props: {}
-}`
-
-    fse.outputFileSync(resolve(output, `${removeExtname(filename)}.d.ts`), content)
+}`,
+      )
+    }
   })
 
   const indexContent = filenames

@@ -142,6 +142,11 @@ export interface VIConfig {
      * svg icons folder path
      */
     entry?: string
+    /**
+     * @default `XIcon`
+     * wrapper component name, svg file names should avoid using names like x-icon.svg
+     */
+    wrapperComponentName?: string
     output?: {
       /**
        * @default `./svg-components`
