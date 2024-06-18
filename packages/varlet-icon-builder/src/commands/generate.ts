@@ -123,7 +123,7 @@ export default defineComponent({
   },
   setup(props) {
     const style = computed(() => ({
-      display: 'inline-block',
+      display: 'inline-flex',
       color: props.color,
       '--x-icon-size': typeof props.size === 'number' ? \`\${props.size}px\` : props.size,
     }))
