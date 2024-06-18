@@ -1,3 +1,12 @@
+## [0.3.3](https://github.com/varletjs/varlet-icon-builder/compare/v0.3.2...v0.3.3) (2024-06-18)
+
+
+### Features
+
+* support wrapper component ([6a65807](https://github.com/varletjs/varlet-icon-builder/commit/6a65807a585184ca4623bcd7296a590b68539da3))
+
+
+
 ## [0.3.2](https://github.com/varletjs/varlet-icon-builder/compare/v0.3.1...v0.3.2) (2024-06-17)
 
 
