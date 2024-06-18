@@ -124,9 +124,8 @@ export default defineComponent({
   setup(props) {
     const style = computed(() => ({
       display: 'inline-block',
-      width: typeof props.size === 'number' ? \`\${props.size}px\` : props.size,
-      height: typeof props.size === 'number' ? \`\${props.size}px\` : props.size,
       color: props.color,
+      '--x-icon-size': typeof props.size === 'number' ? \`\${props.size}px\` : props.size,
     }))
 
     return {
@@ -150,8 +149,8 @@ export default class ${wrapperComponentName} {
   static name: string
     
   $props: {
-    size: string | number
-    color: string
+    size?: string | number
+    color?: string
   }
 }`,
       )
@@ -199,8 +198,12 @@ export function injectSvgCurrentColor(content: string) {
     .replace(/stroke="(?!none).+?"/g, 'stroke="currentColor"')
 }
 
+export function injectSvgStyle(content: string) {
+  return content.replace('<svg', '<svg style="width: var(--x-icon-size); height: var(--x-icon-size)"')
+}
+
 export function compileSvgToVueSfc(name: string, content: string) {
-  content = injectSvgCurrentColor(content.match(/<svg (.|\n|\r)*/)?.[0] ?? '')
+  content = injectSvgStyle(injectSvgCurrentColor(content.match(/<svg (.|\n|\r)*/)?.[0] ?? ''))
   return `\
 <template>
   ${content}
