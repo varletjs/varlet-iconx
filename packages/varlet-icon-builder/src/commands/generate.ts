@@ -1,11 +1,13 @@
 import { getViConfig, GenerateFramework } from '../utils/config.js'
 import { resolve } from 'path'
-import { bigCamelize } from '@varlet/shared'
 import { compileSFC } from '../utils/compiler.js'
 import { removeExtname } from '../utils/shared.js'
 import esbuild from 'esbuild'
 import fse from 'fs-extra'
 import logger from '../utils/logger.js'
+import { getEsbuildLoader } from '../utils/esbuild.js'
+import { generateVueSfc } from '../framework/vue3.js'
+import { generateReactTsx } from '../framework/react.js'
 
 export interface GenerateCommandOptions {
   entry?: string
@@ -19,14 +21,23 @@ export interface GenerateCommandOptions {
   }
 }
 
+export interface GenerateModuleOptions {
+  entry: string
+  output: string
+  format: 'cjs' | 'esm'
+  framework: GenerateFramework
+}
+
 const INDEX_FILE = 'index.ts'
 const INDEX_D_FILE = 'index.d.ts'
 
 export async function generate(options: GenerateCommandOptions = {}) {
   const config = (await getViConfig()) ?? {}
+
   const entry = options.entry ?? config?.generate?.entry ?? './svg'
   const wrapperComponentName = options.wrapperComponentName ?? config?.generate?.wrapperComponentName ?? 'XIcon'
   const framework = options.framework ?? config?.generate?.framework ?? GenerateFramework.vue3
+
   const componentsDir = resolve(
     process.cwd(),
     options.output?.components ?? config.generate?.output?.component ?? './svg-components',
@@ -42,8 +53,18 @@ export async function generate(options: GenerateCommandOptions = {}) {
   }
   generateIndexFile(componentsDir)
   await Promise.all([
-    generateModule(componentsDir, esmDir, 'esm', framework),
-    generateModule(componentsDir, cjsDir, 'cjs', framework),
+    generateModule({
+      entry: componentsDir,
+      output: esmDir,
+      format: 'esm',
+      framework,
+    }),
+    generateModule({
+      entry: componentsDir,
+      output: cjsDir,
+      format: 'cjs',
+      framework,
+    }),
     generateTypes(componentsDir, typesDir, wrapperComponentName),
   ])
   logger.success('generate icons success')
@@ -60,26 +81,14 @@ export function getOutputExtname(format: 'cjs' | 'esm') {
   return format === 'esm' ? '.mjs' : '.js'
 }
 
-function getEsbuildLoader(framework: GenerateFramework) {
-  switch (framework) {
-    case GenerateFramework.vue3:
-      return 'ts'
-    case GenerateFramework.react:
-      return 'tsx'
-    default:
-      return 'ts'
-  }
-}
+export async function generateModule(options: GenerateModuleOptions) {
+  const { output, format, entry, framework } = options
 
-export async function generateModule(
-  entry: string,
-  output: string,
-  format: 'cjs' | 'esm',
-  framework: GenerateFramework,
-) {
   fse.removeSync(output)
+
   const outputExtname = getOutputExtname(format)
   const filenames = fse.readdirSync(entry)
+
   const manifest = await Promise.all(
     filenames.map((filename) => {
       const file = resolve(process.cwd(), entry, filename)
@@ -105,96 +114,6 @@ export async function generateModule(
   manifest.forEach(({ code, filename }) => {
     fse.outputFileSync(resolve(output, filename), code)
   })
-}
-
-export function generateReactTsx(entry: string, output: string, wrapperComponentName: string) {
-  fse.removeSync(output)
-
-  const filenames = fse.readdirSync(entry)
-  filenames.forEach((filename) => {
-    const file = resolve(process.cwd(), entry, filename)
-    const content = fse.readFileSync(file, 'utf-8')
-    const tsxContent = compileSvgToReactTsx(filename.replace('.svg', ''), content)
-
-    fse.outputFileSync(resolve(output, bigCamelize(filename.replace('.svg', '.tsx'))), tsxContent)
-  })
-
-  fse.outputFileSync(
-    resolve(output, 'XIcon.tsx'),
-    `
-import React, { ReactNode, CSSProperties } from 'react';
-
-export interface ${wrapperComponentName}Props {
-  size?: string | number;
-  color?: string;
-  children?: ReactNode;
-}
-
-const ${wrapperComponentName}: React.FC<${wrapperComponentName}Props> = ({ size = '1em', color = 'currentColor', children }) => {
-  const style: CSSProperties = {
-    display: 'inline-flex',
-    color,
-    '--x-icon-size': typeof size === 'number' ? \`\${size}px\` : size,
-  };
-
-  return <i style={style}>{children}</i>
-};
-
-export default ${wrapperComponentName};
-`,
-  )
-}
-
-export function generateVueSfc(entry: string, output: string, wrapperComponentName: string) {
-  fse.removeSync(output)
-
-  const filenames = fse.readdirSync(entry)
-  filenames.forEach((filename) => {
-    const file = resolve(process.cwd(), entry, filename)
-    const content = fse.readFileSync(file, 'utf-8')
-    const sfcContent = compileSvgToVueSfc(filename.replace('.svg', ''), content)
-
-    fse.outputFileSync(resolve(output, bigCamelize(filename.replace('.svg', '.vue'))), sfcContent)
-  })
-
-  fse.outputFileSync(
-    resolve(output, 'XIcon.vue'),
-    `\
-<template>
-  <i :style="style">
-    <slot />
-  </i>
-</template>
-
-<script lang="ts">
-import { defineComponent, computed } from 'vue'
-
-export default defineComponent({
-  name: '${wrapperComponentName}',
-  props: {
-    size: {
-      type: [String, Number],
-      default: '1em',
-    },
-    color: {
-      type: String,
-      default: 'currentColor',
-    }
-  },
-  setup(props) {
-    const style = computed(() => ({
-      display: 'inline-flex',
-      color: props.color,
-      '--x-icon-size': typeof props.size === 'number' ? \`\${props.size}px\` : props.size,
-    }))
-
-    return {
-      style
-    }
-  }
-})
-</script>`,
-  )
 }
 
 export function generateTypes(entry: string, output: string, wrapperComponentName: string) {
@@ -246,48 +165,4 @@ export function generateIndexFile(dir: string) {
     .join('\n')
 
   fse.outputFileSync(resolve(dir, INDEX_FILE), content)
-}
-
-export function injectSvgCurrentColor(content: string) {
-  if (!content.match(/fill=".+?"/g) && !content.match(/stroke=".+?"/g)) {
-    return content.replace('<svg', '<svg fill="currentColor"')
-  }
-
-  return content
-    .replace(/fill="(?!none).+?"/g, 'fill="currentColor"')
-    .replace(/stroke="(?!none).+?"/g, 'stroke="currentColor"')
-}
-
-export function injectSvgStyle(content: string) {
-  return content.replace('<svg', '<svg style="width: var(--x-icon-size); height: var(--x-icon-size)"')
-}
-
-export function compileSvgToReactTsx(name: string, content: string) {
-  content = injectSvgCurrentColor(content.match(/<svg (.|\n|\r)*/)?.[0] ?? '')
-  return `
-import React from 'react';
-
-const ${bigCamelize(name)}: React.FC = () => (
-  ${content}
-);
-
-export default ${bigCamelize(name)};
-`
-}
-
-export function compileSvgToVueSfc(name: string, content: string) {
-  content = injectSvgStyle(injectSvgCurrentColor(content.match(/<svg (.|\n|\r)*/)?.[0] ?? ''))
-  return `\
-<template>
-  ${content}
-</template>
-
-<script lang="ts">
-import { defineComponent } from 'vue'
-
-export default defineComponent({
-  name: '${bigCamelize(name)}',
-})
-</script>
-`
 }
