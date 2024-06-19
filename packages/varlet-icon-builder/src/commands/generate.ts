@@ -26,7 +26,7 @@ export async function generate(options: GenerateCommandOptions = {}) {
   const config = (await getViConfig()) ?? {}
   const entry = options.entry ?? config?.generate?.entry ?? './svg'
   const wrapperComponentName = options.wrapperComponentName ?? config?.generate?.wrapperComponentName ?? 'XIcon'
-  const framework = options.entry ?? config?.generate?.framework ?? GenerateFramework.vue3
+  const framework = options.framework ?? config?.generate?.framework ?? GenerateFramework.vue3
   const componentsDir = resolve(
     process.cwd(),
     options.output?.components ?? config.generate?.output?.component ?? './svg-components',
@@ -42,8 +42,8 @@ export async function generate(options: GenerateCommandOptions = {}) {
   }
   generateIndexFile(componentsDir)
   await Promise.all([
-    generateModule(componentsDir, esmDir, 'esm'),
-    generateModule(componentsDir, cjsDir, 'cjs'),
+    generateModule(componentsDir, esmDir, 'esm', framework),
+    generateModule(componentsDir, cjsDir, 'cjs', framework),
     generateTypes(componentsDir, typesDir, wrapperComponentName),
   ])
   logger.success('generate icons success')
@@ -60,7 +60,23 @@ export function getOutputExtname(format: 'cjs' | 'esm') {
   return format === 'esm' ? '.mjs' : '.js'
 }
 
-export async function generateModule(entry: string, output: string, format: 'cjs' | 'esm') {
+function getEsbuildLoader(framework: GenerateFramework) {
+  switch (framework) {
+    case GenerateFramework.vue3:
+      return 'ts'
+    case GenerateFramework.react:
+      return 'tsx'
+    default:
+      return 'ts'
+  }
+}
+
+export async function generateModule(
+  entry: string,
+  output: string,
+  format: 'cjs' | 'esm',
+  framework: GenerateFramework,
+) {
   fse.removeSync(output)
   const outputExtname = getOutputExtname(format)
   const filenames = fse.readdirSync(entry)
@@ -75,7 +91,7 @@ export async function generateModule(entry: string, output: string, format: 'cjs
 
       return esbuild
         .transform(content, {
-          loader: 'ts',
+          loader: getEsbuildLoader(framework),
           target: 'es2016',
           format,
         })
