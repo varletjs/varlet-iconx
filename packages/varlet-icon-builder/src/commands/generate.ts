@@ -38,7 +38,7 @@ export async function generate(options: GenerateCommandOptions = {}) {
   if (framework === GenerateFramework.vue3) {
     generateVueSfc(entry, componentsDir, wrapperComponentName)
   } else if (framework === GenerateFramework.react) {
-    generateReactTsx(entry, componentsDir)
+    generateReactTsx(entry, componentsDir, wrapperComponentName)
   }
   generateIndexFile(componentsDir)
   await Promise.all([
@@ -107,7 +107,7 @@ export async function generateModule(
   })
 }
 
-export function generateReactTsx(entry: string, output: string) {
+export function generateReactTsx(entry: string, output: string, wrapperComponentName: string) {
   fse.removeSync(output)
 
   const filenames = fse.readdirSync(entry)
@@ -118,6 +118,31 @@ export function generateReactTsx(entry: string, output: string) {
 
     fse.outputFileSync(resolve(output, bigCamelize(filename.replace('.svg', '.tsx'))), tsxContent)
   })
+
+  fse.outputFileSync(
+    resolve(output, 'XIcon.tsx'),
+    `
+import React, { ReactNode, CSSProperties } from 'react';
+
+export interface ${wrapperComponentName}Props {
+  size?: string | number;
+  color?: string;
+  children?: ReactNode;
+}
+
+const ${wrapperComponentName}: React.FC<${wrapperComponentName}Props> = ({ size = '1em', color = 'currentColor', children }) => {
+  const style: CSSProperties = {
+    display: 'inline-flex',
+    color,
+    '--x-icon-size': typeof size === 'number' ? \`\${size}px\` : size,
+  };
+
+  return <i style={style}>{children}</i>
+};
+
+export default ${wrapperComponentName};
+`,
+  )
 }
 
 export function generateVueSfc(entry: string, output: string, wrapperComponentName: string) {
