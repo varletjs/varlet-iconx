@@ -16,8 +16,8 @@ export function generateReactTsx(entry: string, output: string, wrapperComponent
   })
 
   fse.outputFileSync(
-    resolve(output, 'XIcon.tsx'),
-    `
+    resolve(output, `${wrapperComponentName}.tsx`),
+    `\
   import React, { ReactNode, CSSProperties } from 'react';
   
   export interface ${wrapperComponentName}Props {
@@ -43,7 +43,7 @@ export function generateReactTsx(entry: string, output: string, wrapperComponent
 
 export function compileSvgToReactTsx(name: string, content: string) {
   content = injectSvgStyle(injectSvgCurrentColor(content.match(/<svg (.|\n|\r)*/)?.[0] ?? ''))
-  return `
+  return `\
   import React from 'react';
   
   const ${bigCamelize(name)}: React.FC = () => (

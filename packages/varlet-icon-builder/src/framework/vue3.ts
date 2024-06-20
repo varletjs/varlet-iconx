@@ -16,7 +16,7 @@ export function generateVueSfc(entry: string, output: string, wrapperComponentNa
   })
 
   fse.outputFileSync(
-    resolve(output, 'XIcon.vue'),
+    resolve(output, `${wrapperComponentName}.vue`),
     `\
   <template>
     <i :style="style">
