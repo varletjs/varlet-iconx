@@ -2,10 +2,9 @@ import { getViConfig, GenerateFramework } from '../utils/config.js'
 import { resolve } from 'path'
 import { compileSFC } from '../utils/compiler.js'
 import { removeExtname } from '../utils/shared.js'
-import esbuild from 'esbuild'
 import fse from 'fs-extra'
 import logger from '../utils/logger.js'
-import { getEsbuildLoader } from '../utils/esbuild.js'
+import { getTransformResult } from '../utils/esbuild.js'
 import { generateVueSfc } from '../framework/vue3.js'
 import { generateReactTsx } from '../framework/react.js'
 
@@ -98,16 +97,7 @@ export async function generateModule(options: GenerateModuleOptions) {
         content = content.replace(/\.vue/g, outputExtname)
       }
 
-      return esbuild
-        .transform(content, {
-          loader: getEsbuildLoader(framework),
-          target: 'es2016',
-          format,
-        })
-        .then(({ code }) => ({
-          code,
-          filename: filename.replace('.ts', outputExtname).replace('.vue', outputExtname),
-        }))
+      return getTransformResult(content, framework, format, filename, outputExtname)
     }),
   )
 
