@@ -147,6 +147,11 @@ export interface VIConfig {
      * wrapper component name, svg file names should avoid using names like x-icon.svg
      */
     wrapperComponentName?: string
+    /**
+     * @default `vue3`
+     * frameworks supported by the icon library
+     */
+    framework?: 'vue3' | 'react'
     output?: {
       /**
        * @default `./svg-components`
