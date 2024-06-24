@@ -114,7 +114,13 @@ export async function generateModule(options: GenerateModuleOptions) {
         content = content.replace(/\.vue/g, outputExtname)
       }
 
-      return getTransformResult(content, framework, format, filename, outputExtname)
+      return getTransformResult({
+        filename,
+        content,
+        loader: framework === 'vue3' ? 'ts' : 'tsx',
+        format,
+        outputExtname,
+      })
     }),
   )
 
