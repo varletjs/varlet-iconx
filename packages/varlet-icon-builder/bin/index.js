@@ -13,6 +13,7 @@ program
 program
   .command('generate')
   .option('-e --entry <entry>', 'Svg files directory')
+  .option('-f --framework <framework>', 'Framework name, such as vue3, react')
   .option('--wrapperComponentName <wrapperComponentName>', 'Wrapper component name')
   .option('--outputComponents <outputComponents>', 'Output svg component directory')
   .option('--outputTypes <outputTypes>', 'Output types directory')
