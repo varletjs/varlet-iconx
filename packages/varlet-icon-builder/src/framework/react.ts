@@ -1,7 +1,15 @@
 import fse from 'fs-extra'
 import { resolve } from 'path'
-import { bigCamelize } from '@varlet/shared'
-import { injectSvgCurrentColor, injectSvgStyle } from '../utils/shared'
+import { bigCamelize , camelize } from '@varlet/shared'
+import { injectSvgCurrentColor } from '../utils/shared'
+
+export function camelizeSvgAttributes(content: string) {
+  return content.replace(/((\w|-)+)(?==")/g, (_, p1) => camelize(p1))
+}
+
+export function injectReactTsxSvgStyle(content: string) {
+  return content.replace('<svg', "<svg style={{ width: 'var(--x-icon-size)', height: 'var(--x-icon-size)' }}")
+}
 
 export function generateReactTsx(entry: string, output: string, wrapperComponentName: string) {
   fse.removeSync(output)
@@ -41,7 +49,9 @@ export default ${wrapperComponentName}`,
 }
 
 export function compileSvgToReactTsx(name: string, content: string) {
-  content = injectSvgStyle(injectSvgCurrentColor(content.match(/<svg (.|\n|\r)*/)?.[0] ?? ''))
+  content = injectReactTsxSvgStyle(
+    camelizeSvgAttributes(injectSvgCurrentColor(content.match(/<svg (.|\n|\r)*/)?.[0] ?? '')),
+  )
   return `\
 import React from 'react'
   

@@ -1,7 +1,11 @@
 import fse from 'fs-extra'
 import { resolve } from 'path'
 import { bigCamelize } from '@varlet/shared'
-import { injectSvgCurrentColor, injectSvgStyle } from '../utils/shared'
+import { injectSvgCurrentColor } from '../utils/shared'
+
+export function injectVueSfcSvgStyle(content: string) {
+  return content.replace('<svg', '<svg style="width: var(--x-icon-size); height: var(--x-icon-size)"')
+}
 
 export function generateVueSfc(entry: string, output: string, wrapperComponentName: string) {
   fse.removeSync(output)
@@ -56,7 +60,7 @@ export default defineComponent({
 }
 
 export function compileSvgToVueSfc(name: string, content: string) {
-  content = injectSvgStyle(injectSvgCurrentColor(content.match(/<svg (.|\n|\r)*/)?.[0] ?? ''))
+  content = injectVueSfcSvgStyle(injectSvgCurrentColor(content.match(/<svg (.|\n|\r)*/)?.[0] ?? ''))
   return `\
 <template>
   ${content}

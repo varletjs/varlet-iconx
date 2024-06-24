@@ -17,7 +17,3 @@ export function injectSvgCurrentColor(content: string) {
     .replace(/fill="(?!none).+?"/g, 'fill="currentColor"')
     .replace(/stroke="(?!none).+?"/g, 'stroke="currentColor"')
 }
-
-export function injectSvgStyle(content: string) {
-  return content.replace('<svg', '<svg style="width: var(--x-icon-size); height: var(--x-icon-size)"')
-}
