@@ -2,11 +2,11 @@ import { getViConfig, GenerateFramework } from '../utils/config.js'
 import { resolve } from 'path'
 import { compileSFC } from '../utils/compiler.js'
 import { removeExtname } from '../utils/shared.js'
-import fse from 'fs-extra'
-import logger from '../utils/logger.js'
 import { getTransformResult } from '../utils/esbuild.js'
 import { generateVueSfc } from '../framework/vue3.js'
 import { generateReactTsx } from '../framework/react.js'
+import fse from 'fs-extra'
+import logger from '../utils/logger.js'
 
 export interface GenerateCommandOptions {
   entry?: string
@@ -30,13 +30,11 @@ export interface GenerateModuleOptions {
 const INDEX_FILE = 'index.ts'
 const INDEX_D_FILE = 'index.d.ts'
 
-export async function generate(options: GenerateCommandOptions = {}) {
+export async function normalizeConfig(options: GenerateCommandOptions = {}) {
   const config = (await getViConfig()) ?? {}
-
   const entry = options.entry ?? config?.generate?.entry ?? './svg'
   const wrapperComponentName = options.wrapperComponentName ?? config?.generate?.wrapperComponentName ?? 'XIcon'
   const framework = options.framework ?? config?.generate?.framework ?? GenerateFramework.vue3
-
   const componentsDir = resolve(
     process.cwd(),
     options.output?.components ?? config.generate?.output?.component ?? './svg-components',
@@ -45,12 +43,29 @@ export async function generate(options: GenerateCommandOptions = {}) {
   const cjsDir = resolve(process.cwd(), options.output?.cjs ?? config.generate?.output?.cjs ?? './svg-cjs')
   const typesDir = resolve(process.cwd(), options.output?.types ?? config.generate?.output?.types ?? './svg-types')
 
+  return {
+    entry,
+    framework,
+    wrapperComponentName,
+    componentsDir,
+    esmDir,
+    cjsDir,
+    typesDir,
+  }
+}
+
+export async function generate(options: GenerateCommandOptions = {}) {
+  const { framework, entry, cjsDir, esmDir, componentsDir, typesDir, wrapperComponentName } =
+    await normalizeConfig(options)
+
   if (framework === GenerateFramework.vue3) {
     generateVueSfc(entry, componentsDir, wrapperComponentName)
   } else if (framework === GenerateFramework.react) {
     generateReactTsx(entry, componentsDir, wrapperComponentName)
   }
+
   generateIndexFile(componentsDir)
+
   await Promise.all([
     generateModule({
       entry: componentsDir,
@@ -66,6 +81,7 @@ export async function generate(options: GenerateCommandOptions = {}) {
     }),
     generateTypes(componentsDir, typesDir, wrapperComponentName),
   ])
+
   logger.success('generate icons success')
 }
 
@@ -87,7 +103,6 @@ export async function generateModule(options: GenerateModuleOptions) {
 
   const outputExtname = getOutputExtname(format)
   const filenames = fse.readdirSync(entry)
-
   const manifest = await Promise.all(
     filenames.map((filename) => {
       const file = resolve(process.cwd(), entry, filename)
@@ -108,6 +123,7 @@ export async function generateModule(options: GenerateModuleOptions) {
 
 export function generateTypes(entry: string, output: string, wrapperComponentName: string) {
   fse.removeSync(output)
+
   const filenames = fse.readdirSync(entry).filter((filename) => filename !== INDEX_FILE)
   filenames.forEach((filename) => {
     if (filename === `${wrapperComponentName}.vue`) {

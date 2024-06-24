@@ -18,56 +18,55 @@ export function generateVueSfc(entry: string, output: string, wrapperComponentNa
   fse.outputFileSync(
     resolve(output, `${wrapperComponentName}.vue`),
     `\
-  <template>
-    <i :style="style">
-      <slot />
-    </i>
-  </template>
+<template>
+  <i :style="style">
+    <slot />
+  </i>
+</template>
+
+<script lang="ts">
+import { defineComponent, computed } from 'vue'
   
-  <script lang="ts">
-  import { defineComponent, computed } from 'vue'
-  
-  export default defineComponent({
-    name: '${wrapperComponentName}',
-    props: {
-      size: {
-        type: [String, Number],
-        default: '1em',
-      },
-      color: {
-        type: String,
-        default: 'currentColor',
-      }
+export default defineComponent({
+  name: '${wrapperComponentName}',
+  props: {
+    size: {
+      type: [String, Number],
+      default: '1em',
     },
-    setup(props) {
-      const style = computed(() => ({
-        display: 'inline-flex',
-        color: props.color,
-        '--x-icon-size': typeof props.size === 'number' ? \`\${props.size}px\` : props.size,
-      }))
-  
-      return {
-        style
-      }
+    color: {
+      type: String,
+      default: 'currentColor',
     }
-  })
-  </script>`,
+  },
+  setup(props) {
+    const style = computed(() => ({
+      display: 'inline-flex',
+      color: props.color,
+      '--x-icon-size': typeof props.size === 'number' ? \`\${props.size}px\` : props.size,
+    }))
+      
+    return {
+      style
+    }
+  }
+})
+</script>`,
   )
 }
 
 export function compileSvgToVueSfc(name: string, content: string) {
   content = injectSvgStyle(injectSvgCurrentColor(content.match(/<svg (.|\n|\r)*/)?.[0] ?? ''))
   return `\
-  <template>
-    ${content}
-  </template>
+<template>
+  ${content}
+</template>
   
-  <script lang="ts">
-  import { defineComponent } from 'vue'
+<script lang="ts">
+import { defineComponent } from 'vue'
   
-  export default defineComponent({
-    name: '${bigCamelize(name)}',
-  })
-  </script>
-  `
+export default defineComponent({
+  name: '${bigCamelize(name)}',
+})
+</script>`
 }

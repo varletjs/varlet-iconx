@@ -18,38 +18,36 @@ export function generateReactTsx(entry: string, output: string, wrapperComponent
   fse.outputFileSync(
     resolve(output, `${wrapperComponentName}.tsx`),
     `\
-  import React, { ReactNode, CSSProperties } from 'react';
+import React, { ReactNode, CSSProperties } from 'react'
   
-  export interface ${wrapperComponentName}Props {
-    size?: string | number;
-    color?: string;
-    children?: ReactNode;
-  }
+export interface ${wrapperComponentName}Props {
+  size?: string | number
+  color?: string
+  children?: ReactNode
+}
   
-  const ${wrapperComponentName}: React.FC<${wrapperComponentName}Props> = ({ size = '1em', color = 'currentColor', children }) => {
-    const style: CSSProperties = {
-      display: 'inline-flex',
-      color,
-      '--x-icon-size': typeof size === 'number' ? \`\${size}px\` : size,
-    };
-  
-    return <i style={style}>{children}</i>
+const ${wrapperComponentName}: React.FC<${wrapperComponentName}Props> = ({ size = '1em', color = 'currentColor', children }) => {
+  const style: CSSProperties = {
+    display: 'inline-flex',
+    color,
+    '--x-icon-size': typeof size === 'number' ? \`\${size}px\` : size,
   };
+    
+  return <i style={style}>{children}</i>
+}
   
-  export default ${wrapperComponentName};
-  `,
+export default ${wrapperComponentName}`,
   )
 }
 
 export function compileSvgToReactTsx(name: string, content: string) {
   content = injectSvgStyle(injectSvgCurrentColor(content.match(/<svg (.|\n|\r)*/)?.[0] ?? ''))
   return `\
-  import React from 'react';
+import React from 'react'
   
-  const ${bigCamelize(name)}: React.FC = () => (
-    ${content}
-  );
+const ${bigCamelize(name)}: React.FC = () => (
+  ${content}
+)
   
-  export default ${bigCamelize(name)};
-  `
+export default ${bigCamelize(name)}`
 }
