@@ -1,10 +1,10 @@
 import fse from 'fs-extra'
 import { resolve } from 'path'
-import { bigCamelize , camelize } from '@varlet/shared'
+import { bigCamelize, camelize } from '@varlet/shared'
 import { injectSvgCurrentColor } from '../utils/shared'
 
 export function camelizeSvgAttributes(content: string) {
-  return content.replace(/((\w|-)+)(?==")/g, (_, p1) => camelize(p1))
+  return content.replace(/((\w|-|:)+)(?==")/g, (_, p1) => camelize(p1.replace(/:/g, '-')))
 }
 
 export function injectReactTsxSvgStyle(content: string) {

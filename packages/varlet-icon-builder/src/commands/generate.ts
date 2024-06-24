@@ -120,7 +120,7 @@ export async function generateModule(options: GenerateModuleOptions) {
         format,
       }).then(({ code }) => ({
         code,
-        filename: filename.replace('.ts', outputExtname).replace('.vue', outputExtname).replace('.tsx', outputExtname),
+        filename: filename.replace(/\.tsx?$/, outputExtname).replace(/\.vue$/, outputExtname),
       }))
     }),
   )
