@@ -1,4 +1,4 @@
-import { getViConfig, GenerateFramework } from '../utils/config.js'
+import { getViConfig } from '../utils/config.js'
 import { resolve } from 'path'
 import { compileSFC } from '../utils/compiler.js'
 import { removeExtname } from '../utils/shared.js'
@@ -11,7 +11,7 @@ import logger from '../utils/logger.js'
 export interface GenerateCommandOptions {
   entry?: string
   wrapperComponentName?: string
-  framework?: GenerateFramework
+  framework?: 'vue3' | 'react'
   output?: {
     components?: string
     types?: string
@@ -24,7 +24,7 @@ export interface GenerateModuleOptions {
   entry: string
   output: string
   format: 'cjs' | 'esm'
-  framework: GenerateFramework
+  framework: 'vue3' | 'react'
 }
 
 const INDEX_FILE = 'index.ts'
@@ -34,7 +34,7 @@ export async function normalizeConfig(options: GenerateCommandOptions = {}) {
   const config = (await getViConfig()) ?? {}
   const entry = options.entry ?? config?.generate?.entry ?? './svg'
   const wrapperComponentName = options.wrapperComponentName ?? config?.generate?.wrapperComponentName ?? 'XIcon'
-  const framework = options.framework ?? config?.generate?.framework ?? GenerateFramework.vue3
+  const framework = options.framework ?? config?.generate?.framework ?? 'vue3'
   const componentsDir = resolve(
     process.cwd(),
     options.output?.components ?? config.generate?.output?.component ?? './svg-components',
@@ -58,9 +58,11 @@ export async function generate(options: GenerateCommandOptions = {}) {
   const { framework, entry, cjsDir, esmDir, componentsDir, typesDir, wrapperComponentName } =
     await normalizeConfig(options)
 
-  if (framework === GenerateFramework.vue3) {
+  if (framework === 'vue3') {
     generateVueSfc(entry, componentsDir, wrapperComponentName)
-  } else if (framework === GenerateFramework.react) {
+  }
+
+  if (framework === 'react') {
     generateReactTsx(entry, componentsDir, wrapperComponentName)
   }
 

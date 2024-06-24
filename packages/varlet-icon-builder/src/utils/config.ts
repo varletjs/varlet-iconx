@@ -1,10 +1,5 @@
 import { loadConfig } from 'unconfig'
 
-export enum GenerateFramework {
-  vue3 = 'vue3',
-  react = 'react',
-}
-
 export interface VIConfig {
   /**
    * @default `varlet-icons`
@@ -101,7 +96,7 @@ export interface VIConfig {
   generate?: {
     entry?: string
     wrapperComponentName?: string
-    framework?: GenerateFramework
+    framework?: 'vue3' | 'react'
     output?: {
       component?: string
       types?: string
