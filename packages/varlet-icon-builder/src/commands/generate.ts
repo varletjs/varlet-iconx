@@ -115,12 +115,13 @@ export async function generateModule(options: GenerateModuleOptions) {
       }
 
       return getTransformResult({
-        filename,
         content,
         loader: framework === 'vue3' ? 'ts' : 'tsx',
         format,
-        outputExtname,
-      })
+      }).then(({ code }) => ({
+        code,
+        filename: filename.replace('.ts', outputExtname).replace('.vue', outputExtname).replace('.tsx', outputExtname),
+      }))
     }),
   )
 
@@ -170,12 +171,7 @@ export default class ${removeExtname(filename)} {
 export function generateIndexFile(dir: string) {
   const filenames = fse.readdirSync(dir)
   const content = filenames
-    .map(
-      (filename) =>
-        `export { default as ${removeExtname(filename)} } from './${
-          filename.endsWith('.ts') ? filename.replace('.ts', '') : filename
-        }'`,
-    )
+    .map((filename) => `export { default as ${removeExtname(filename)} } from './${filename.replace(/\.tsx?$/, '')}'`)
     .join('\n')
 
   fse.outputFileSync(resolve(dir, INDEX_FILE), content)
