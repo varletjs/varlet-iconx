@@ -67,6 +67,8 @@ export async function generate(options: GenerateCommandOptions = {}) {
     generateReactTsx(entry, componentsDir, wrapperComponentName)
   }
 
+  generateIndexFile(componentsDir)
+
   if (!componentsOnly) {
     await Promise.all([
       generateModule({
