@@ -152,6 +152,11 @@ export interface VIConfig {
      * frameworks supported by the icon library
      */
     framework?: 'vue3' | 'react'
+    /**
+     * @default `false`
+     * only generate components, do not generate cjs, esm modules and types
+     */
+    componentsOnly?: boolean
     output?: {
       /**
        * @default `./svg-components`

@@ -13,6 +13,7 @@ export interface GenerateCommandOptions {
   entry?: string
   wrapperComponentName?: string
   framework?: 'vue3' | 'react'
+  componentsOnly?: boolean
   output?: {
     components?: string
     types?: string
@@ -40,12 +41,14 @@ export async function normalizeConfig(options: GenerateCommandOptions = {}) {
   const esmDir = resolve(process.cwd(), options.output?.esm ?? config.generate?.output?.esm ?? './svg-esm')
   const cjsDir = resolve(process.cwd(), options.output?.cjs ?? config.generate?.output?.cjs ?? './svg-cjs')
   const typesDir = resolve(process.cwd(), options.output?.types ?? config.generate?.output?.types ?? './svg-types')
+  const componentsOnly = options.componentsOnly ?? config.generate?.componentsOnly ?? false
 
   return {
     entry,
     framework,
     wrapperComponentName,
     componentsDir,
+    componentsOnly,
     esmDir,
     cjsDir,
     typesDir,
@@ -53,7 +56,7 @@ export async function normalizeConfig(options: GenerateCommandOptions = {}) {
 }
 
 export async function generate(options: GenerateCommandOptions = {}) {
-  const { framework, entry, cjsDir, esmDir, componentsDir, typesDir, wrapperComponentName } =
+  const { framework, entry, cjsDir, esmDir, componentsDir, typesDir, wrapperComponentName, componentsOnly } =
     await normalizeConfig(options)
 
   if (framework === 'vue3') {
@@ -64,27 +67,27 @@ export async function generate(options: GenerateCommandOptions = {}) {
     generateReactTsx(entry, componentsDir, wrapperComponentName)
   }
 
-  generateIndexFile(componentsDir)
-
-  await Promise.all([
-    generateModule({
-      entry: componentsDir,
-      output: esmDir,
-      format: 'esm',
-      framework,
-    }),
-    generateModule({
-      entry: componentsDir,
-      output: cjsDir,
-      format: 'cjs',
-      framework,
-    }),
-    (framework === 'vue3' ? generateVueSfcTypes : generateReactTsxTypes)({
-      entry: componentsDir,
-      output: typesDir,
-      wrapperComponentName,
-    }),
-  ])
+  if (!componentsOnly) {
+    await Promise.all([
+      generateModule({
+        entry: componentsDir,
+        output: esmDir,
+        format: 'esm',
+        framework,
+      }),
+      generateModule({
+        entry: componentsDir,
+        output: cjsDir,
+        format: 'cjs',
+        framework,
+      }),
+      (framework === 'vue3' ? generateVueSfcTypes : generateReactTsxTypes)({
+        entry: componentsDir,
+        output: typesDir,
+        wrapperComponentName,
+      }),
+    ])
+  }
 
   logger.success('generate icons success')
 }

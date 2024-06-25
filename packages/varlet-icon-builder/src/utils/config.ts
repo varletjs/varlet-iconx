@@ -92,15 +92,50 @@ export interface VIConfig {
      */
     output?: string
   }
-
+  /**
+   * generate command related options
+   */
   generate?: {
+    /**
+     * @default `./svg`
+     * svg icons folder path
+     */
     entry?: string
+    /**
+     * @default `XIcon`
+     * wrapper component name, svg file names should avoid using names like x-icon.svg
+     */
     wrapperComponentName?: string
+    /**
+     * @default `false`
+     * only generate components, do not generate cjs, esm modules and types
+     */
+    componentsOnly?: boolean
+    /**
+     * @default `vue3`
+     * frameworks supported by the icon library
+     */
     framework?: 'vue3' | 'react'
     output?: {
+      /**
+       * @default `./svg-components`
+       * component output path
+       */
       component?: string
+      /**
+       * @default `./svg-types`
+       * ts declaration output path
+       */
       types?: string
+      /**
+       * @default `./svg-esm`
+       * es module format output path
+       */
       esm?: string
+      /**
+       * @default `./svg-cjs`
+       * commonjs module format output path
+       */
       cjs?: string
     }
   }
