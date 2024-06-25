@@ -1,3 +1,21 @@
+# [0.4.0](https://github.com/varletjs/varlet-icon-builder/compare/v0.3.5...v0.4.0) (2024-06-25)
+
+
+### Bug Fixes
+
+* add index file generate ([24b778a](https://github.com/varletjs/varlet-icon-builder/commit/24b778af8d887425b4570788b7dfc33bd15bdb6b))
+* fix module extname error ([ae8dce9](https://github.com/varletjs/varlet-icon-builder/commit/ae8dce9be1ba838a1d4248c0afc83f1665076bf3))
+* fix module extname error for react ([6ee1e00](https://github.com/varletjs/varlet-icon-builder/commit/6ee1e0023c85235dc1624dca54675e77abf2fa95))
+
+
+### Features
+
+* support componentsOnly ([1e4a791](https://github.com/varletjs/varlet-icon-builder/commit/1e4a791e664cffec366e6fefb794b20967b27ff9))
+* support framework cli option ([a66a9d6](https://github.com/varletjs/varlet-icon-builder/commit/a66a9d6d6ac9654fd12cbdb7412ef35317736812))
+* support generate react component ([#4](https://github.com/varletjs/varlet-icon-builder/issues/4)) ([103e9c2](https://github.com/varletjs/varlet-icon-builder/commit/103e9c23643ce6442ce7cc240ea601ad7d7daa5a))
+
+
+
 ## [0.3.5](https://github.com/varletjs/varlet-icon-builder/compare/v0.3.4...v0.3.5) (2024-06-18)
 
 
