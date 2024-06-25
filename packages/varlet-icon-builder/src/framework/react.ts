@@ -1,7 +1,8 @@
 import fse from 'fs-extra'
 import { resolve } from 'path'
 import { bigCamelize, camelize } from '@varlet/shared'
-import { injectSvgCurrentColor } from '../utils/shared'
+import { injectSvgCurrentColor, removeExtname } from '../utils/shared'
+import { INDEX_D_FILE, INDEX_FILE } from '../utils/constants'
 
 export function camelizeSvgAttributes(content: string) {
   return content.replace(/((\w|-|:)+)(?==")/g, (_, p1) => camelize(p1.replace(/:/g, '-')))
@@ -9,6 +10,54 @@ export function camelizeSvgAttributes(content: string) {
 
 export function injectReactTsxSvgStyle(content: string) {
   return content.replace('<svg', "<svg style={{ width: 'var(--x-icon-size)', height: 'var(--x-icon-size)' }}")
+}
+
+export function generateReactTsxTypes({
+  entry,
+  output,
+  wrapperComponentName,
+}: {
+  entry: string
+  output: string
+  wrapperComponentName: string
+}) {
+  fse.removeSync(output)
+
+  const filenames = fse.readdirSync(entry).filter((filename) => filename !== INDEX_FILE)
+  filenames.forEach((filename) => {
+    if (filename === `${wrapperComponentName}.tsx`) {
+      fse.outputFileSync(
+        resolve(output, `${wrapperComponentName}.d.ts`),
+        `\
+import * as React from 'react'
+
+declare const ${wrapperComponentName}: React.FunctionComponent<{ 
+  color?: string 
+  size?: string | number
+  children?: React.ReactElement
+}>
+        
+export default ${wrapperComponentName}`,
+      )
+    } else {
+      const componentName = removeExtname(filename)
+      fse.outputFileSync(
+        resolve(output, `${componentName}.d.ts`),
+        `\
+import * as React from 'react'
+
+declare const ${componentName}: React.FunctionComponent<{}>
+
+export default ${componentName}`,
+      )
+    }
+  })
+
+  const indexContent = filenames
+    .map((filename) => `export { default as ${removeExtname(filename)} } from './${removeExtname(filename)}'`)
+    .join('\n')
+
+  fse.outputFileSync(resolve(output, INDEX_D_FILE), indexContent)
 }
 
 export function generateReactTsx(entry: string, output: string, wrapperComponentName: string) {

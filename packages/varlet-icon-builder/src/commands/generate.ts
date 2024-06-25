@@ -3,8 +3,9 @@ import { resolve } from 'path'
 import { compileSFC } from '../utils/compiler.js'
 import { removeExtname } from '../utils/shared.js'
 import { getTransformResult } from '../utils/esbuild.js'
-import { generateVueSfc } from '../framework/vue3.js'
-import { generateReactTsx } from '../framework/react.js'
+import { generateVueSfc, generateVueSfcTypes } from '../framework/vue3.js'
+import { generateReactTsx, generateReactTsxTypes } from '../framework/react.js'
+import { INDEX_FILE } from '../utils/constants.js'
 import fse from 'fs-extra'
 import logger from '../utils/logger.js'
 
@@ -26,9 +27,6 @@ export interface GenerateModuleOptions {
   format: 'cjs' | 'esm'
   framework: 'vue3' | 'react'
 }
-
-const INDEX_FILE = 'index.ts'
-const INDEX_D_FILE = 'index.d.ts'
 
 export async function normalizeConfig(options: GenerateCommandOptions = {}) {
   const config = (await getViConfig()) ?? {}
@@ -81,7 +79,11 @@ export async function generate(options: GenerateCommandOptions = {}) {
       format: 'cjs',
       framework,
     }),
-    generateTypes(componentsDir, typesDir, wrapperComponentName),
+    (framework === 'vue3' ? generateVueSfcTypes : generateReactTsxTypes)({
+      entry: componentsDir,
+      output: typesDir,
+      wrapperComponentName,
+    }),
   ])
 
   logger.success('generate icons success')
@@ -128,44 +130,6 @@ export async function generateModule(options: GenerateModuleOptions) {
   manifest.forEach(({ code, filename }) => {
     fse.outputFileSync(resolve(output, filename), code)
   })
-}
-
-export function generateTypes(entry: string, output: string, wrapperComponentName: string) {
-  fse.removeSync(output)
-
-  const filenames = fse.readdirSync(entry).filter((filename) => filename !== INDEX_FILE)
-  filenames.forEach((filename) => {
-    if (filename === `${wrapperComponentName}.vue`) {
-      fse.outputFileSync(
-        resolve(output, `${wrapperComponentName}.d.ts`),
-        `\
-export default class ${wrapperComponentName} {
-  static name: string
-    
-  $props: {
-    size?: string | number
-    color?: string
-  }
-}`,
-      )
-    } else {
-      fse.outputFileSync(
-        resolve(output, `${removeExtname(filename)}.d.ts`),
-        `\
-export default class ${removeExtname(filename)} {
-  static name: string
-
-  $props: {}
-}`,
-      )
-    }
-  })
-
-  const indexContent = filenames
-    .map((filename) => `export { default as ${removeExtname(filename)} } from './${removeExtname(filename)}'`)
-    .join('\n')
-
-  fse.outputFileSync(resolve(output, INDEX_D_FILE), indexContent)
 }
 
 export function generateIndexFile(dir: string) {
