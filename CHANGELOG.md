@@ -1,3 +1,17 @@
+# [0.5.0](https://github.com/varletjs/varlet-icon-builder/compare/v0.4.0...v0.5.0) (2024-06-29)
+
+
+### Bug Fixes
+
+* fix resolver types ([7a5fdbb](https://github.com/varletjs/varlet-icon-builder/commit/7a5fdbb2a075d414006d324770e3b150dbca24c4))
+
+
+### Features
+
+* support resolver generation ([1e5cbeb](https://github.com/varletjs/varlet-icon-builder/commit/1e5cbeb4433b188842654d03fcdd7225c38722ea))
+
+
+
 # [0.4.0](https://github.com/varletjs/varlet-icon-builder/compare/v0.3.5...v0.4.0) (2024-06-25)
 
 
