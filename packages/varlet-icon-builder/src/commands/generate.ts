@@ -33,6 +33,7 @@ export interface GenerateModuleOptions {
 
 export interface GenerateResolverOptions {
   resolverNamespace: string
+  wrapperComponentName: string
   output: string
   format: 'cjs' | 'esm'
 }
@@ -114,11 +115,13 @@ export async function generate(options: GenerateCommandOptions = {}) {
       generateResolver({
         output: resolverDir,
         resolverNamespace,
+        wrapperComponentName,
         format: 'esm',
       }),
       generateResolver({
         output: resolverDir,
         resolverNamespace,
+        wrapperComponentName,
         format: 'cjs',
       }),
       (framework === 'vue3' ? generateVueSfcTypes : generateReactTsxTypes)({
@@ -184,7 +187,12 @@ export function generateIndexFile(dir: string) {
   fse.outputFileSync(resolve(dir, INDEX_FILE), content)
 }
 
-export async function generateResolver({ resolverNamespace, output, format }: GenerateResolverOptions) {
+export async function generateResolver({
+  resolverNamespace,
+  wrapperComponentName,
+  output,
+  format,
+}: GenerateResolverOptions) {
   const packageName = fse.readJSONSync(resolve(process.cwd(), 'package.json')).name
   const content = `
 const kebabCase = (s) => {
@@ -198,10 +206,10 @@ export default function resolver() {
       type: 'component',
       resolve: (name: string) => {
         const kebabCaseName = kebabCase(name)
-        if (kebabCaseName.startsWith('${resolverNamespace}')) {
+        if (kebabCaseName.startsWith('${resolverNamespace}-')) {
           return {
             from: '${packageName}',
-            name: name.slice(${resolverNamespace.length}),
+            name: name === '${wrapperComponentName}' ? name : name.slice(${resolverNamespace.length}),
           }
         }
       },
@@ -219,6 +227,6 @@ export default function resolver() {
 }
 
 export function generateResolverTypes(output: string) {
-  const content = `export default function resolver(): { from: string; name: string }[]`
+  const content = `export default function resolver(): { type: 'component'; resolve(): { from: string; name: string } | undefined }[]`
   fse.outputFileSync(resolve(output, 'index.d.ts'), content)
 }
