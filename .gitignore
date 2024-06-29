@@ -8,4 +8,5 @@ svg-esm
 svg-cjs
 svg-components
 svg-types
+packages/varlet-test-icons/resolver
 .DS_Store

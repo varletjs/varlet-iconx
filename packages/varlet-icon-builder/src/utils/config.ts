@@ -107,6 +107,11 @@ export interface VIConfig {
      */
     wrapperComponentName?: string
     /**
+     * @default `x`
+     * unplugin-vue-components resolver namespace, please same as `wrapperComponentName` namespace
+     */
+    resolverNamespace?: string
+    /**
      * @default `false`
      * only generate components, do not generate cjs, esm modules and types
      */
@@ -137,6 +142,11 @@ export interface VIConfig {
        * commonjs module format output path
        */
       cjs?: string
+      /**
+       * @default `./resolver`
+       * unplugin-vue-components resolver output path
+       */
+      resolver?: string
     }
   }
 }

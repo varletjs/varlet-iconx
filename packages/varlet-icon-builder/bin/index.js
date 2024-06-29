@@ -14,15 +14,14 @@ program
   .command('generate')
   .option('-e --entry <entry>', 'Svg files directory')
   .option('-f --framework <framework>', 'Framework name, such as vue3, react')
-  .option(
-    '-componentsOnly --componentsOnly <componentsOnly>',
-    'Only generate components, do not generate cjs, esm modules and types',
-  )
+  .option('--componentsOnly <componentsOnly>', 'Only generate components, do not generate cjs, esm modules and types')
+  .option('--resolverNamespace <resolverNamespace>', 'Resolver namespace')
   .option('--wrapperComponentName <wrapperComponentName>', 'Wrapper component name')
   .option('--outputComponents <outputComponents>', 'Output svg component directory')
   .option('--outputTypes <outputTypes>', 'Output types directory')
   .option('--outputEsm <outputEsm>', 'Output esm directory')
   .option('--outputCjs <outputCjs>', 'Output cjs directory')
+  .option('--outputResolver <outputResolver>', 'Output resolver directory')
   .description('Generate icon components from svg files')
   .action(generate)
 

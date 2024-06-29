@@ -11,6 +11,7 @@ import logger from '../utils/logger.js'
 
 export interface GenerateCommandOptions {
   entry?: string
+  resolverNamespace?: string
   wrapperComponentName?: string
   framework?: 'vue3' | 'react'
   componentsOnly?: boolean
@@ -19,6 +20,7 @@ export interface GenerateCommandOptions {
     types?: string
     esm?: string
     cjs?: string
+    resolver?: string
   }
 }
 
@@ -29,11 +31,18 @@ export interface GenerateModuleOptions {
   framework: 'vue3' | 'react'
 }
 
+export interface GenerateResolverOptions {
+  resolverNamespace: string
+  output: string
+  format: 'cjs' | 'esm'
+}
+
 export async function normalizeConfig(options: GenerateCommandOptions = {}) {
   const config = (await getViConfig()) ?? {}
   const entry = options.entry ?? config?.generate?.entry ?? './svg'
   const wrapperComponentName = options.wrapperComponentName ?? config?.generate?.wrapperComponentName ?? 'XIcon'
   const framework = options.framework ?? config?.generate?.framework ?? 'vue3'
+  const resolverNamespace = options.resolverNamespace ?? config?.generate?.resolverNamespace ?? 'x'
   const componentsDir = resolve(
     process.cwd(),
     options.output?.components ?? config.generate?.output?.component ?? './svg-components',
@@ -41,13 +50,19 @@ export async function normalizeConfig(options: GenerateCommandOptions = {}) {
   const esmDir = resolve(process.cwd(), options.output?.esm ?? config.generate?.output?.esm ?? './svg-esm')
   const cjsDir = resolve(process.cwd(), options.output?.cjs ?? config.generate?.output?.cjs ?? './svg-cjs')
   const typesDir = resolve(process.cwd(), options.output?.types ?? config.generate?.output?.types ?? './svg-types')
+  const resolverDir = resolve(
+    process.cwd(),
+    options.output?.resolver ?? config.generate?.output?.resolver ?? './resolver',
+  )
   const componentsOnly = options.componentsOnly ?? config.generate?.componentsOnly ?? false
 
   return {
     entry,
     framework,
+    resolverNamespace,
     wrapperComponentName,
     componentsDir,
+    resolverDir,
     componentsOnly,
     esmDir,
     cjsDir,
@@ -56,8 +71,18 @@ export async function normalizeConfig(options: GenerateCommandOptions = {}) {
 }
 
 export async function generate(options: GenerateCommandOptions = {}) {
-  const { framework, entry, cjsDir, esmDir, componentsDir, typesDir, wrapperComponentName, componentsOnly } =
-    await normalizeConfig(options)
+  const {
+    framework,
+    entry,
+    cjsDir,
+    esmDir,
+    componentsDir,
+    typesDir,
+    resolverDir,
+    wrapperComponentName,
+    resolverNamespace,
+    componentsOnly,
+  } = await normalizeConfig(options)
 
   if (framework === 'vue3') {
     generateVueSfc(entry, componentsDir, wrapperComponentName)
@@ -70,6 +95,9 @@ export async function generate(options: GenerateCommandOptions = {}) {
   generateIndexFile(componentsDir)
 
   if (!componentsOnly) {
+    fse.removeSync(resolverDir)
+    generateResolverTypes(resolverDir)
+
     await Promise.all([
       generateModule({
         entry: componentsDir,
@@ -82,6 +110,16 @@ export async function generate(options: GenerateCommandOptions = {}) {
         output: cjsDir,
         format: 'cjs',
         framework,
+      }),
+      generateResolver({
+        output: resolverDir,
+        resolverNamespace,
+        format: 'esm',
+      }),
+      generateResolver({
+        output: resolverDir,
+        resolverNamespace,
+        format: 'cjs',
       }),
       (framework === 'vue3' ? generateVueSfcTypes : generateReactTsxTypes)({
         entry: componentsDir,
@@ -144,4 +182,43 @@ export function generateIndexFile(dir: string) {
     .join('\n')
 
   fse.outputFileSync(resolve(dir, INDEX_FILE), content)
+}
+
+export async function generateResolver({ resolverNamespace, output, format }: GenerateResolverOptions) {
+  const packageName = fse.readJSONSync(resolve(process.cwd(), 'package.json')).name
+  const content = `
+const kebabCase = (s) => {
+  const ret = s.replace(/([A-Z])/g, ' $1').trim()
+  return ret.split(' ').join('-').toLowerCase()
+}
+
+export default function resolver() {
+  return [
+    {
+      type: 'component',
+      resolve: (name: string) => {
+        const kebabCaseName = kebabCase(name)
+        if (kebabCaseName.startsWith('${resolverNamespace}')) {
+          return {
+            from: '${packageName}',
+            name: name.slice(${resolverNamespace.length}),
+          }
+        }
+      },
+    },
+  ]
+}`
+
+  const { code } = await getTransformResult({
+    loader: 'ts',
+    content,
+    format,
+  })
+
+  fse.outputFileSync(resolve(output, `index${getOutputExtname(format)}`), code)
+}
+
+export function generateResolverTypes(output: string) {
+  const content = `export default function resolver(): { from: string; name: string }[]`
+  fse.outputFileSync(resolve(output, 'index.d.ts'), content)
 }
