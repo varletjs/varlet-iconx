@@ -148,6 +148,11 @@ export interface VIConfig {
      */
     wrapperComponentName?: string
     /**
+     * @default `x`
+     * unplugin-vue-components resolver namespace, please same as `wrapperComponentName` namespace
+     */
+    resolverNamespace?: string
+    /**
      * @default `vue3`
      * frameworks supported by the icon library
      */
@@ -178,6 +183,11 @@ export interface VIConfig {
        * commonjs module format output path
        */
       cjs?: string
+      /**
+       * @default `./resolver`
+       * unplugin-vue-components resolver output path
+       */
+      resolver?: string
     }
   }
   /**
