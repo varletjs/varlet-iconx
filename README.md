@@ -29,11 +29,7 @@ Varlet Iconx is a collection of tools that provide icon solutions for [varlet](h
 
 ### Sponsor this project
 
-Sponsor this project to support our better creation. It is recommended to use afdian to subscribe, and your avatar will appear in this project.
-
-#### Afdian
-
-<a href="https://afdian.net/a/haoziqaq">https://afdian.net/a/haoziqaq</a>
+Sponsor this project to support our better creation.
 
 #### Wechat / Alipay
 
