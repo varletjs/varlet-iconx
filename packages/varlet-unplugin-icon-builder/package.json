@@ -1,7 +1,7 @@
 {
   "name": "@varlet/unplugin-icon-builder",
   "type": "module",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "keywords": [
     "varlet",
     "icon",
