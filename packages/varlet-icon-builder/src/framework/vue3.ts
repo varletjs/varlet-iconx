@@ -1,6 +1,6 @@
 import fse from 'fs-extra'
 import { resolve } from 'path'
-import { bigCamelize } from '@varlet/shared'
+import { pascalCase } from 'rattail'
 import { injectSvgCurrentColor, removeExtname } from '../utils/shared.js'
 import { INDEX_D_FILE, INDEX_FILE } from '../utils/constants.js'
 
@@ -64,7 +64,7 @@ export function generateVueSfc(entry: string, output: string, wrapperComponentNa
     const content = fse.readFileSync(file, 'utf-8')
     const sfcContent = compileSvgToVueSfc(filename.replace('.svg', ''), content)
 
-    fse.outputFileSync(resolve(output, bigCamelize(filename.replace('.svg', '.vue'))), sfcContent)
+    fse.outputFileSync(resolve(output, pascalCase(filename.replace('.svg', '.vue'))), sfcContent)
   })
 
   fse.outputFileSync(
@@ -118,7 +118,7 @@ export function compileSvgToVueSfc(name: string, content: string) {
 import { defineComponent } from 'vue'
   
 export default defineComponent({
-  name: '${bigCamelize(name)}',
+  name: '${pascalCase(name)}',
 })
 </script>`
 }

@@ -67,7 +67,7 @@
     "fs-extra": "11.2.0",
     "chokidar": "3.6.0",
     "fast-glob": "^3.3.2",
-    "@varlet/shared": "3.2.11-alpha.1716133168406",
+    "rattail": "^1.0.0",
     "@varlet/icon-builder": "workspace:*"
   },
   "devDependencies": {

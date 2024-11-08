@@ -1,5 +1,5 @@
 import { AxleInstance, createAxle } from '@varlet/axle'
-import { kebabCase } from '@varlet/shared'
+import { kebabCase } from 'rattail'
 import { getViConfig } from '../utils/config.js'
 import { resolvePath } from '../utils/shared.js'
 import fse from 'fs-extra'

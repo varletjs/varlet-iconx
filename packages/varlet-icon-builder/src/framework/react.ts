@@ -1,6 +1,6 @@
 import fse from 'fs-extra'
 import { resolve } from 'path'
-import { bigCamelize, camelize } from '@varlet/shared'
+import { pascalCase, camelize } from 'rattail'
 import { injectSvgCurrentColor, removeExtname } from '../utils/shared'
 import { INDEX_D_FILE, INDEX_FILE } from '../utils/constants'
 
@@ -69,7 +69,7 @@ export function generateReactTsx(entry: string, output: string, wrapperComponent
     const content = fse.readFileSync(file, 'utf-8')
     const tsxContent = compileSvgToReactTsx(filename.replace('.svg', ''), content)
 
-    fse.outputFileSync(resolve(output, bigCamelize(filename.replace('.svg', '.tsx'))), tsxContent)
+    fse.outputFileSync(resolve(output, pascalCase(filename.replace('.svg', '.tsx'))), tsxContent)
   })
 
   fse.outputFileSync(
@@ -104,9 +104,9 @@ export function compileSvgToReactTsx(name: string, content: string) {
   return `\
 import React from 'react'
   
-const ${bigCamelize(name)}: React.FC = () => (
+const ${pascalCase(name)}: React.FC = () => (
   ${content}
 )
   
-export default ${bigCamelize(name)}`
+export default ${pascalCase(name)}`
 }

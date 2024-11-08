@@ -46,8 +46,8 @@
     "typescript": "^5.2.2",
     "esbuild": "0.21.5",
     "hash-sum": "^2.0.0",
-    "@varlet/axle": "^0.7.1",
-    "@varlet/shared": "^3.3.0"
+    "@varlet/axle": "^0.9.0",
+    "rattail": "^1.0.0"
   },
   "devDependencies": {
     "@types/fs-extra": "^11.0.4",
