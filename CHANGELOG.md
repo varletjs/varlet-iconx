@@ -1,3 +1,12 @@
+# [0.6.0](https://github.com/varletjs/varlet-icon-builder/compare/v0.5.2...v0.6.0) (2025-01-02)
+
+
+### Features
+
+* support colorful icon ([76c9cd2](https://github.com/varletjs/varlet-icon-builder/commit/76c9cd27b581d67b8b6e8caaf6690477ce2c7f87))
+
+
+
 ## [0.5.2](https://github.com/varletjs/varlet-icon-builder/compare/v0.5.1...v0.5.2) (2025-01-02)
 
 
