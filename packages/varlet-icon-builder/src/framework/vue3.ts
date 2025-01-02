@@ -5,7 +5,7 @@ import { injectSvgCurrentColor, removeExtname } from '../utils/shared.js'
 import { INDEX_D_FILE, INDEX_FILE } from '../utils/constants.js'
 
 export function injectVueSfcSvgStyle(content: string) {
-  return content.replace('<svg', '<svg style="width: var(--x-icon-size); height: var(--x-icon-size)"')
+  return content.replace('<svg', '<svg style="width: var(--x-icon-size, 1em); height: var(--x-icon-size, 1em)"')
 }
 
 export function generateVueSfcTypes({
