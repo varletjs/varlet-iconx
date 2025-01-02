@@ -55,14 +55,20 @@ export default class ${componentName} {
   fse.outputFileSync(resolve(output, INDEX_D_FILE), indexContent)
 }
 
-export function generateVueSfc(entry: string, output: string, wrapperComponentName: string) {
+export function generateVueSfc(
+  entry: string,
+  output: string,
+  wrapperComponentName: string,
+  colorful: (name: string, content: string) => boolean,
+) {
   fse.removeSync(output)
 
   const filenames = fse.readdirSync(entry)
   filenames.forEach((filename) => {
     const file = resolve(process.cwd(), entry, filename)
     const content = fse.readFileSync(file, 'utf-8')
-    const sfcContent = compileSvgToVueSfc(filename.replace('.svg', ''), content)
+    const isColorful = colorful(filename, content)
+    const sfcContent = compileSvgToVueSfc(filename.replace('.svg', ''), content, isColorful)
 
     fse.outputFileSync(resolve(output, pascalCase(filename.replace('.svg', '.vue'))), sfcContent)
   })
@@ -107,8 +113,14 @@ export default defineComponent({
   )
 }
 
-export function compileSvgToVueSfc(name: string, content: string) {
-  content = injectVueSfcSvgStyle(injectSvgCurrentColor(content.match(/<svg (.|\n|\r)*/)?.[0] ?? ''))
+export function compileSvgToVueSfc(name: string, content: string, isColorful: boolean) {
+  content = content.match(/<svg (.|\n|\r)*/)?.[0] ?? ''
+
+  if (!isColorful) {
+    content = injectSvgCurrentColor(content)
+  }
+
+  content = injectVueSfcSvgStyle(content)
   return `\
 <template>
   ${content}

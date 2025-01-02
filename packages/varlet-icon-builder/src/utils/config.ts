@@ -121,6 +121,11 @@ export interface VIConfig {
      * frameworks supported by the icon library
      */
     framework?: 'vue3' | 'react'
+    /**
+     * @default () => false
+     * is colorful icon
+     */
+    colorful?: (name: string, content: string) => boolean
     output?: {
       /**
        * @default `./svg-components`

@@ -162,6 +162,11 @@ export interface VIConfig {
      * only generate components, do not generate cjs, esm modules and types
      */
     componentsOnly?: boolean
+    /**
+     * @default () => false
+     * is colorful icon
+     */
+    colorful?: (name: string, content: string) => boolean 
     output?: {
       /**
        * @default `./svg-components`

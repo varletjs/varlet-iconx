@@ -60,14 +60,20 @@ export default ${componentName}`,
   fse.outputFileSync(resolve(output, INDEX_D_FILE), indexContent)
 }
 
-export function generateReactTsx(entry: string, output: string, wrapperComponentName: string) {
+export function generateReactTsx(
+  entry: string,
+  output: string,
+  wrapperComponentName: string,
+  colorful: (name: string, content: string) => boolean,
+) {
   fse.removeSync(output)
 
   const filenames = fse.readdirSync(entry)
   filenames.forEach((filename) => {
     const file = resolve(process.cwd(), entry, filename)
     const content = fse.readFileSync(file, 'utf-8')
-    const tsxContent = compileSvgToReactTsx(filename.replace('.svg', ''), content)
+    const isColorful = colorful(filename, content)
+    const tsxContent = compileSvgToReactTsx(filename.replace('.svg', ''), content, isColorful)
 
     fse.outputFileSync(resolve(output, pascalCase(filename.replace('.svg', '.tsx'))), tsxContent)
   })
@@ -97,10 +103,14 @@ export default ${wrapperComponentName}`,
   )
 }
 
-export function compileSvgToReactTsx(name: string, content: string) {
-  content = injectReactTsxSvgStyle(
-    camelizeSvgAttributes(injectSvgCurrentColor(content.match(/<svg (.|\n|\r)*/)?.[0] ?? '')),
-  )
+export function compileSvgToReactTsx(name: string, content: string, isColorful: boolean) {
+  content = content.match(/<svg (.|\n|\r)*/)?.[0] ?? ''
+
+  if (!isColorful) {
+    content = injectSvgCurrentColor(content)
+  }
+
+  content = injectReactTsxSvgStyle(camelizeSvgAttributes(content))
   return `\
 import React from 'react'
   

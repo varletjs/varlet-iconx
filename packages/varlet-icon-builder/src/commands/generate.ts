@@ -15,6 +15,7 @@ export interface GenerateCommandOptions {
   wrapperComponentName?: string
   framework?: 'vue3' | 'react'
   componentsOnly?: boolean
+  colorful?: (name: string, content: string) => boolean
   output?: {
     components?: string
     types?: string
@@ -44,6 +45,7 @@ export async function normalizeConfig(options: GenerateCommandOptions = {}) {
   const wrapperComponentName = options.wrapperComponentName ?? config?.generate?.wrapperComponentName ?? 'XIcon'
   const framework = options.framework ?? config?.generate?.framework ?? 'vue3'
   const resolverNamespace = options.resolverNamespace ?? config?.generate?.resolverNamespace ?? 'x'
+  const colorful = config?.generate?.colorful ?? (() => false)
   const componentsDir = resolve(
     process.cwd(),
     options.output?.components ?? config.generate?.output?.component ?? './svg-components',
@@ -68,6 +70,7 @@ export async function normalizeConfig(options: GenerateCommandOptions = {}) {
     esmDir,
     cjsDir,
     typesDir,
+    colorful,
   }
 }
 
@@ -83,14 +86,15 @@ export async function generate(options: GenerateCommandOptions = {}) {
     wrapperComponentName,
     resolverNamespace,
     componentsOnly,
+    colorful,
   } = await normalizeConfig(options)
 
   if (framework === 'vue3') {
-    generateVueSfc(entry, componentsDir, wrapperComponentName)
+    generateVueSfc(entry, componentsDir, wrapperComponentName, colorful)
   }
 
   if (framework === 'react') {
-    generateReactTsx(entry, componentsDir, wrapperComponentName)
+    generateReactTsx(entry, componentsDir, wrapperComponentName, colorful)
   }
 
   generateIndexFile(componentsDir)
