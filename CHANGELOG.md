@@ -1,3 +1,12 @@
+## [0.5.2](https://github.com/varletjs/varlet-icon-builder/compare/v0.5.1...v0.5.2) (2025-01-02)
+
+
+### Features
+
+* support svg size fallback ([c2f2c79](https://github.com/varletjs/varlet-icon-builder/commit/c2f2c797155c17f5e87ef32df876f0fadc3b36af))
+
+
+
 ## [0.5.1](https://github.com/varletjs/varlet-icon-builder/compare/v0.5.0...v0.5.1) (2024-11-08)
 
 
