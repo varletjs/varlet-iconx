@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-import { build, generate, figma } from '../dist/index.js'
 import { Command } from 'commander'
+import { build, figma, generate } from '../dist/index.js'
 
 const program = new Command()
 

@@ -1,9 +1,9 @@
 import { AxleInstance, createAxle } from '@varlet/axle'
+import fse from 'fs-extra'
 import { kebabCase } from 'rattail'
 import { getViConfig } from '../utils/config.js'
-import { resolvePath } from '../utils/shared.js'
-import fse from 'fs-extra'
 import logger from '../utils/logger.js'
+import { resolvePath } from '../utils/shared.js'
 
 export interface FigmaCommandOptions {
   token?: string

@@ -1,12 +1,12 @@
-import type { UnpluginFactory } from 'unplugin'
-import type { Options } from './types'
-import { createUnplugin } from 'unplugin'
+import { basename, isAbsolute, resolve } from 'path'
 import { buildIcons } from '@varlet/icon-builder'
-import { isAbsolute, resolve, basename } from 'path'
-import { debounce, isPlainObject, uniq, slash } from 'rattail'
+import chokidar from 'chokidar'
 import glob from 'fast-glob'
 import fse from 'fs-extra'
-import chokidar from 'chokidar'
+import { debounce, isPlainObject, slash, uniq } from 'rattail'
+import type { UnpluginFactory } from 'unplugin'
+import { createUnplugin } from 'unplugin'
+import type { Options } from './types'
 
 export function resolvePath(path: string) {
   return isAbsolute(path) ? path : resolve(process.cwd(), path)
@@ -67,7 +67,7 @@ export const unpluginFactory: UnpluginFactory<Options | undefined> = (options: O
   function getOnDemandFilter() {
     const defaultInclude = ['./src/**/*.{vue,jsx,tsx,js,ts}']
     const internalInclude = ['node_modules', generatedFileId]
-    const include = isPlainObject(onDemand) ? onDemand.include ?? defaultInclude : defaultInclude
+    const include = isPlainObject(onDemand) ? (onDemand.include ?? defaultInclude) : defaultInclude
     const exclude = isPlainObject(onDemand) ? [...internalInclude, ...(onDemand.exclude ?? [])] : internalInclude
 
     return {
@@ -211,7 +211,7 @@ export const unpluginFactory: UnpluginFactory<Options | undefined> = (options: O
       fse.outputFileSync(generatedFileId, cssTemplate)
 
       if (!base64) {
-        fse.outputFileSync(generatedFontId, ttf!)
+        fse.outputFileSync(generatedFontId, ttf! as any)
       }
     } catch (e) {
       console.error(e)
@@ -229,7 +229,7 @@ export const unpluginFactory: UnpluginFactory<Options | undefined> = (options: O
       }
     },
 
-    async resolveId(id) {
+    resolveId(id) {
       if (id === moduleId) {
         return generatedFileId
       }

@@ -1,20 +1,23 @@
 {
   "root": true,
   "version": "0.6.0",
+  "type": "module",
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "postinstall": "simple-git-hooks",
     "bootstrap": "pnpm install && pnpm build",
     "build": "pnpm --dir packages/varlet-icon-builder build && pnpm --dir packages/varlet-unplugin-icon-builder build",
-    "lint": "eslint --ext .ts,.js",
+    "lint": "eslint --fix .",
     "format": "prettier --write .",
     "release": "pnpm build && vr release",
     "clean": "rimraf ./node_modules ./packages/*/node_modules"
   },
   "devDependencies": {
     "@varlet/release": "0.2.5",
-    "eslint": "^8.53.0",
-    "prettier": "^3.1.0",
+    "@configurajs/eslint": "^0.1.0",
+    "@configurajs/prettier": "^0.1.1",
+    "eslint": "^9.18.0",
+    "prettier": "^3.4.2",
     "simple-git-hooks": "^2.9.0",
     "nano-staged": "^0.8.0",
     "typescript": "^5.2.2",

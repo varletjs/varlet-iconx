@@ -1,13 +1,13 @@
-import { getViConfig } from '../utils/config.js'
 import { resolve } from 'path'
-import { compileSFC } from '../utils/compiler.js'
-import { removeExtname } from '../utils/shared.js'
-import { getTransformResult } from '../utils/esbuild.js'
-import { generateVueSfc, generateVueSfcTypes } from '../framework/vue3.js'
-import { generateReactTsx, generateReactTsxTypes } from '../framework/react.js'
-import { INDEX_FILE } from '../utils/constants.js'
 import fse from 'fs-extra'
+import { generateReactTsx, generateReactTsxTypes } from '../framework/react.js'
+import { generateVueSfc, generateVueSfcTypes } from '../framework/vue3.js'
+import { compileSFC } from '../utils/compiler.js'
+import { getViConfig } from '../utils/config.js'
+import { INDEX_FILE } from '../utils/constants.js'
+import { getTransformResult } from '../utils/esbuild.js'
 import logger from '../utils/logger.js'
+import { removeExtname } from '../utils/shared.js'
 
 export interface GenerateCommandOptions {
   entry?: string

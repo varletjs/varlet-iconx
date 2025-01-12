@@ -1,8 +1,8 @@
-import fse from 'fs-extra'
 import { resolve } from 'path'
-import { pascalCase, camelize } from 'rattail'
-import { injectSvgCurrentColor, removeExtname } from '../utils/shared'
+import fse from 'fs-extra'
+import { camelize, pascalCase } from 'rattail'
 import { INDEX_D_FILE, INDEX_FILE } from '../utils/constants'
+import { injectSvgCurrentColor, removeExtname } from '../utils/shared'
 
 export function camelizeSvgAttributes(content: string) {
   return content.replace(/((\w|-|:)+)(?==")/g, (_, p1) => camelize(p1.replace(/:/g, '-')))

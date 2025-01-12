@@ -1,7 +1,7 @@
-import { parse as parseSFC, compileTemplate, compileScript as compileScriptSFC, registerTS } from '@vue/compiler-sfc'
-import ts from 'typescript'
+import { compileScript as compileScriptSFC, compileTemplate, parse as parseSFC, registerTS } from '@vue/compiler-sfc'
 import fse from 'fs-extra'
 import hash from 'hash-sum'
+import ts from 'typescript'
 
 registerTS(() => ts)
 

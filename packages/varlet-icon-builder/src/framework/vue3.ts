@@ -1,8 +1,8 @@
-import fse from 'fs-extra'
 import { resolve } from 'path'
+import fse from 'fs-extra'
 import { pascalCase } from 'rattail'
-import { injectSvgCurrentColor, removeExtname } from '../utils/shared.js'
 import { INDEX_D_FILE, INDEX_FILE } from '../utils/constants.js'
+import { injectSvgCurrentColor, removeExtname } from '../utils/shared.js'
 
 export function injectVueSfcSvgStyle(content: string) {
   return content.replace('<svg', '<svg style="width: var(--x-icon-size, 1em); height: var(--x-icon-size, 1em)"')
