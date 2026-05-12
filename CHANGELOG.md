@@ -1,3 +1,12 @@
+## [0.6.1](https://github.com/varletjs/varlet-icon-builder/compare/v0.6.0...v0.6.1) (2026-05-12)
+
+
+### Features
+
+* update module resolution to bundler in tsconfig ([841286a](https://github.com/varletjs/varlet-icon-builder/commit/841286a6a857f6d37c363f8e9644e1f6a9351942))
+
+
+
 # [0.6.0](https://github.com/varletjs/varlet-icon-builder/compare/v0.5.2...v0.6.0) (2025-01-02)
 
 
