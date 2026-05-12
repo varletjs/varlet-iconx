@@ -6,6 +6,7 @@ import fse from 'fs-extra'
 import { debounce, isPlainObject, slash, uniq } from 'rattail'
 import type { UnpluginFactory } from 'unplugin'
 import { createUnplugin } from 'unplugin'
+import type { ViteDevServer } from 'vite'
 import type { Options } from './types'
 
 export function resolvePath(path: string) {
@@ -51,8 +52,9 @@ export const unpluginFactory: UnpluginFactory<Options | undefined> = (options: O
   const generatedFontId = resolvePath(generatedFilename.replace('.css', '.ttf'))
   const graph = new Map<string, string[]>()
   let tokens = new Set<string>()
+  const watchers: chokidar.FSWatcher[] = []
+  let watchersStarted = false
 
-  initWatcher()
   initOnDemand()
   const wait = writeVirtualIconFile()
 
@@ -146,21 +148,28 @@ export const unpluginFactory: UnpluginFactory<Options | undefined> = (options: O
     return uniq(tokens)
   }
 
-  function initWatcher() {
-    if (process.env.NODE_ENV === 'development') {
-      const writeVirtualIconFileWithDebounce = debounce(writeVirtualIconFile, 20)
-      const initOnDemandWithDebounce = debounce(initOnDemand, 20)
+  function startWatchers() {
+    if (watchersStarted || process.env.NODE_ENV !== 'development') {
+      return
+    }
 
-      if (!libId) {
-        // lib no need to watch, because it's a package in node_modules
+    watchersStarted = true
+    const writeVirtualIconFileWithDebounce = debounce(writeVirtualIconFile, 20)
+    const initOnDemandWithDebounce = debounce(initOnDemand, 20)
+
+    if (!libId) {
+      // lib no need to watch, because it's a package in node_modules
+      watchers.push(
         chokidar.watch(dirId, { ignoreInitial: true }).on('all', () => {
           initOnDemandWithDebounce()
           writeVirtualIconFileWithDebounce()
-        })
-      }
+        }),
+      )
+    }
 
-      if (onDemand) {
-        const { include, exclude } = getOnDemandFilter()
+    if (onDemand) {
+      const { include, exclude } = getOnDemandFilter()
+      watchers.push(
         chokidar.watch(include, { ignoreInitial: true, ignored: exclude }).on('all', (eventName, path) => {
           const isSame = updateGraphNode(eventName, path)
           if (isSame) {
@@ -168,9 +177,14 @@ export const unpluginFactory: UnpluginFactory<Options | undefined> = (options: O
           }
           // graph node is same after update, no need to update virtual icon file
           writeVirtualIconFileWithDebounce()
-        })
-      }
+        }),
+      )
     }
+  }
+
+  async function stopWatchers() {
+    watchersStarted = false
+    await Promise.all(watchers.splice(0).map((watcher) => watcher.close()))
   }
 
   async function writeVirtualIconFile() {
@@ -227,6 +241,17 @@ export const unpluginFactory: UnpluginFactory<Options | undefined> = (options: O
         // in development, for service startup speed, no need to wait
         await wait
       }
+    },
+
+    configureServer(server: ViteDevServer) {
+      startWatchers()
+      server.httpServer?.once('close', () => {
+        stopWatchers()
+      })
+    },
+
+    async closeBundle() {
+      await stopWatchers()
     },
 
     resolveId(id) {
