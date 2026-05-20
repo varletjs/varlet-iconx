@@ -9,6 +9,7 @@ export function camelizeSvgAttributes(content: string) {
 }
 
 export function injectReactTsxSvgStyle(content: string) {
+  content = content.replaceAll('<path', '<path style="stroke-width:var(--x-icon-stroke-width);"')
   return content.replace('<svg', "<svg style={{ width: 'var(--x-icon-size, 1em)', height: 'var(--x-icon-size, 1em)' }}")
 }
 
@@ -34,6 +35,7 @@ import * as React from 'react'
 declare const ${wrapperComponentName}: React.FunctionComponent<{ 
   color?: string 
   size?: string | number
+  strokeWidth?: string | number
   children?: React.ReactElement
 }>
         
@@ -86,14 +88,16 @@ import React, { ReactNode, CSSProperties } from 'react'
 export interface ${wrapperComponentName}Props {
   size?: string | number
   color?: string
+  strokeWidth?: string | number
   children?: ReactNode
 }
   
-const ${wrapperComponentName}: React.FC<${wrapperComponentName}Props> = ({ size = '1em', color = 'currentColor', children }) => {
+const ${wrapperComponentName}: React.FC<${wrapperComponentName}Props> = ({ size = '1em', color = 'currentColor',strokeWidth='2', children }) => {
   const style: CSSProperties = {
     display: 'inline-flex',
     color,
     '--x-icon-size': typeof size === 'number' ? \`\${size}px\` : size,
+    '--x-icon-stroke-width': typeof size === 'number' ? \`\${size}px\` : size,
   };
     
   return <i style={style}>{children}</i>

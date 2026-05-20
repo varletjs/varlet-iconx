@@ -5,6 +5,7 @@ import { INDEX_D_FILE, INDEX_FILE } from '../utils/constants.js'
 import { injectSvgCurrentColor, removeExtname } from '../utils/shared.js'
 
 export function injectVueSfcSvgStyle(content: string) {
+  content = content.replaceAll('<path', '<path style="stroke-width:var(--x-icon-stroke-width);"')
   return content.replace('<svg', '<svg style="width: var(--x-icon-size, 1em); height: var(--x-icon-size, 1em)"')
 }
 
@@ -31,6 +32,7 @@ export default class ${wrapperComponentName} {
   $props: {
     size?: string | number
     color?: string
+    strokeWidth?: string | number
   }
 }`,
       )
@@ -84,7 +86,7 @@ export function generateVueSfc(
 
 <script lang="ts">
 import { defineComponent, computed } from 'vue'
-  
+
 export default defineComponent({
   name: '${wrapperComponentName}',
   props: {
@@ -95,15 +97,20 @@ export default defineComponent({
     color: {
       type: String,
       default: 'currentColor',
-    }
+    },
+    strokeWidth: {
+      type: [String, Number],
+      default: '2',
+    },
   },
   setup(props) {
     const style = computed(() => ({
       display: 'inline-flex',
       color: props.color,
       '--x-icon-size': typeof props.size === 'number' ? \`\${props.size}px\` : props.size,
+      '--x-icon-stroke-width': typeof props.strokeWidth === 'number' ? \`\${props.strokeWidth}px\` : props.strokeWidth,
     }))
-      
+
     return {
       style
     }
